@@ -4,6 +4,51 @@ type User {
   email: String! @unique
   password: String!
   token: String!
-  createdAt: DateTime! @createdAt 
-  updatedAt: DateTime! @updatedAt 
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+  status: userStatus! @default(value: INATIVO)
+  events: [Event!]! @relation(name: "UserToEvent", onDelete: SET_NULL)
+  favorites: [Favorite!]! @relation(name: "UserToFavorite", onDelete: CASCADE)
+}
+
+type Event {
+  id: ID! @id
+  img: String!
+  title: String!
+  price: Float!
+  dateStart: String!
+  dateEnd: String!
+  status: eventStatus! @default(value: EM_BREVE)
+  eventType: eventType! @default(value: ONLINE)
+  category: Category! @relation(name: "CategoryToEvent", onDelete: SET_NULL)
+  users: [User!]! @relation(name: "UserToEvent", onDelete: SET_NULL)
+}
+
+
+type Category {
+  id: ID! @id
+  name: String!
+  events: [Event!]! @relation(name: "CategoryToEvent", onDelete: CASCADE)
+}
+
+type Favorite {
+  id: ID! @id
+  events: Event! @relation(name: "FavoriteToEvent", onDelete: SET_NULL)
+  user: User! @relation(name: "UserToFavorite", onDelete: SET_NULL)
+}
+
+enum userStatus {
+  ATIVO
+  INATIVO
+}
+
+enum eventType {
+  ONLINE
+  PRESENCIAL
+}
+
+enum eventStatus {
+  EM_BREVE
+  EM_ANDAMENTO
+  CONCLUIDO
 }
