@@ -1,10 +1,11 @@
 {
-  "name": "zeppelum-api-gql",
+  "name": "zeppelum-api",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon --exec babel-node src/index"
+    "start": "nodemon --exec babel-node src/index --ext graphql, js",
+    "get-schema": "graphql get-schema -p prisma"
   },
   "keywords": [],
   "author": "",
@@ -14,8 +15,9 @@
     "@babel/core": "^7.13.10",
     "@babel/node": "^7.13.12",
     "@babel/preset-env": "^7.13.12",
-    "graphql-yoga": "^1.18.3",
+    "graphql-cli": "^2.16.4",
+    "graphql-yoga": "^1.16.7",
     "jsonwebtoken": "^8.5.1",
-    "prisma-binding": "^2.3.16"
+    "prisma-binding": "^2.1.1"
   }
 }
