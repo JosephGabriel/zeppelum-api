@@ -1,15 +1,24 @@
 type Query {
   users: [User!]!
   me: User!
+
+  event(id: ID!): Event!
+  events(query: String, first: Int, skip: Int): [Event!]!
 }
 
 type Mutation {
+  logginUser(data: LogginUserInput): User!
+
   createUser(data: CreateUserInput!): User!
   updateUser(data: UpdateUserInput!): User!
   deleteUser: User!
 
   createEvent(data: CreateEventInput!): Event!
   updateEvent(data: UpdateEventInput!): Event!
+  deleteEvent(id: ID!): Event!
+
+  createFavorite(data: CreateFavoriteInput!): Favorite!
+  deleteFavorite(id: ID!): Favorite!
 
   createCategory(data: CreateCategoryInput!): Category!
   updateCategory(data: UpdateCategoryInput!): Category!
@@ -50,6 +59,11 @@ type Favorite {
   id: ID!
   event: Event!
   user: User!
+}
+
+input LogginUserInput {
+  email: String!
+  password: String!
 }
 
 input CreateUserInput {
@@ -94,6 +108,11 @@ input CreateCategoryInput {
 input UpdateCategoryInput {
   id: ID!
   name: String
+}
+
+input CreateFavoriteInput {
+  event: Event!
+  user: User!
 }
 
 enum userStatus {

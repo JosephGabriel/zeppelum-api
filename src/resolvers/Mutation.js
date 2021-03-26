@@ -1,6 +1,26 @@
+import bcrypt from "bcrypt";
 import { generateToken, hashPassword, getUserId } from "../../utils/utils";
 
 export const Mutation = {
+  async logginUser(parent, { data }, { prisma }, info) {
+    const user = await prisma.query.user(
+      { where: { email: data.email } },
+      info
+    );
+
+    if (!user) {
+      throw new Error("Email ou Senha Inválido");
+    }
+
+    const passwordMatch = await bcrypt.compare(data.password, user.password);
+
+    if (!passwordMatch) {
+      throw new Error("Email ou Senha Inválido");
+    }
+
+    return user;
+  },
+
   async createUser(parent, { data }, { prisma }, info) {
     const emailTaken = await prisma.exists.User({ email: data.email });
 
@@ -148,6 +168,57 @@ export const Mutation = {
     const event = prisma.mutation.deleteEvent(
       {
         where: { id },
+      },
+      info
+    );
+
+    return event;
+  },
+
+  async createFavorite(parent, { data }, { prisma, request }, info) {
+    const userId = getUserId(request);
+
+    const userExists = await prisma.exists.User({ id: userId });
+
+    if (!userExists) {
+      throw new Error("Usuário inválido");
+    }
+
+    const favorite = await prisma.mutation.createFavorite(
+      {
+        data: {
+          event: {
+            connect: {
+              id: data.event,
+            },
+          },
+          user: {
+            connect: {
+              id: data.user,
+            },
+          },
+        },
+      },
+      info
+    );
+
+    return favorite;
+  },
+
+  async deleteFavorite(parent, { id }, { prisma, request }, info) {
+    const userId = getUserId(request);
+
+    const userExists = await prisma.exists.User({ id: userId });
+
+    if (!userExists) {
+      throw new Error("Usuário inválido");
+    }
+
+    const event = await prisma.mutation.deleteFavorite(
+      {
+        where: {
+          id,
+        },
       },
       info
     );
