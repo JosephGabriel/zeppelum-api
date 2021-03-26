@@ -36,9 +36,7 @@ export const getUserId = (request, requiredAuth = true) => {
     : request.connection.context.Authorization;
 
   if (header) {
-    const splitedToken = header.replace("Bearer ", "");
-
-    const token = jwt.verify(splitedToken, "zeppelum");
+    const token = jwt.verify(header, "zeppelum");
     return token.userId;
   }
 

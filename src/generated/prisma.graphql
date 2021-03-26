@@ -1,11 +1,15 @@
 # source: http://localhost:4466
-# timestamp: Wed Mar 24 2021 20:13:55 GMT-0300 (Horário Padrão de Brasília)
+# timestamp: Wed Mar 24 2021 21:25:43 GMT-0300 (Horário Padrão de Brasília)
 
 type AggregateCategory {
   count: Int!
 }
 
 type AggregateEvent {
+  count: Int!
+}
+
+type AggregateFavorite {
   count: Int!
 }
 
@@ -279,6 +283,11 @@ input EventCreateManyWithoutCategoryInput {
 input EventCreateManyWithoutUsersInput {
   create: [EventCreateWithoutUsersInput!]
   connect: [EventWhereUniqueInput!]
+}
+
+input EventCreateOneInput {
+  create: EventCreateInput
+  connect: EventWhereUniqueInput
 }
 
 input EventCreateWithoutCategoryInput {
@@ -647,6 +656,18 @@ enum eventType {
   PRESENCIAL
 }
 
+input EventUpdateDataInput {
+  img: String
+  title: String
+  price: Float
+  dateStart: String
+  dateEnd: String
+  status: eventStatus
+  eventType: eventType
+  category: CategoryUpdateOneRequiredWithoutEventsInput
+  users: UserUpdateManyWithoutEventsInput
+}
+
 input EventUpdateInput {
   img: String
   title: String
@@ -708,6 +729,13 @@ input EventUpdateManyWithWhereNestedInput {
   data: EventUpdateManyDataInput!
 }
 
+input EventUpdateOneRequiredInput {
+  create: EventCreateInput
+  connect: EventWhereUniqueInput
+  update: EventUpdateDataInput
+  upsert: EventUpsertNestedInput
+}
+
 input EventUpdateWithoutCategoryDataInput {
   img: String
   title: String
@@ -738,6 +766,11 @@ input EventUpdateWithWhereUniqueWithoutCategoryInput {
 input EventUpdateWithWhereUniqueWithoutUsersInput {
   where: EventWhereUniqueInput!
   data: EventUpdateWithoutUsersDataInput!
+}
+
+input EventUpsertNestedInput {
+  update: EventUpdateDataInput!
+  create: EventCreateInput!
 }
 
 input EventUpsertWithWhereUniqueWithoutCategoryInput {
@@ -1013,6 +1046,234 @@ input EventWhereUniqueInput {
   id: ID
 }
 
+type Favorite implements Node {
+  id: ID!
+  event: Event!
+  user: User!
+}
+
+"""A connection to a list of items."""
+type FavoriteConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [FavoriteEdge]!
+  aggregate: AggregateFavorite!
+}
+
+input FavoriteCreateInput {
+  id: ID
+  event: EventCreateOneInput!
+  user: UserCreateOneWithoutFavoritesInput!
+}
+
+input FavoriteCreateManyWithoutUserInput {
+  create: [FavoriteCreateWithoutUserInput!]
+  connect: [FavoriteWhereUniqueInput!]
+}
+
+input FavoriteCreateWithoutUserInput {
+  id: ID
+  event: EventCreateOneInput!
+}
+
+"""An edge in a connection."""
+type FavoriteEdge {
+  """The item at the end of the edge."""
+  node: Favorite!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum FavoriteOrderByInput {
+  id_ASC
+  id_DESC
+}
+
+type FavoritePreviousValues {
+  id: ID!
+}
+
+input FavoriteScalarWhereInput {
+  """Logical AND on all given filters."""
+  AND: [FavoriteScalarWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [FavoriteScalarWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [FavoriteScalarWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+}
+
+type FavoriteSubscriptionPayload {
+  mutation: MutationType!
+  node: Favorite
+  updatedFields: [String!]
+  previousValues: FavoritePreviousValues
+}
+
+input FavoriteSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [FavoriteSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [FavoriteSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [FavoriteSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: FavoriteWhereInput
+}
+
+input FavoriteUpdateInput {
+  event: EventUpdateOneRequiredInput
+  user: UserUpdateOneRequiredWithoutFavoritesInput
+}
+
+input FavoriteUpdateManyWithoutUserInput {
+  create: [FavoriteCreateWithoutUserInput!]
+  connect: [FavoriteWhereUniqueInput!]
+  set: [FavoriteWhereUniqueInput!]
+  disconnect: [FavoriteWhereUniqueInput!]
+  delete: [FavoriteWhereUniqueInput!]
+  update: [FavoriteUpdateWithWhereUniqueWithoutUserInput!]
+  deleteMany: [FavoriteScalarWhereInput!]
+  upsert: [FavoriteUpsertWithWhereUniqueWithoutUserInput!]
+}
+
+input FavoriteUpdateWithoutUserDataInput {
+  event: EventUpdateOneRequiredInput
+}
+
+input FavoriteUpdateWithWhereUniqueWithoutUserInput {
+  where: FavoriteWhereUniqueInput!
+  data: FavoriteUpdateWithoutUserDataInput!
+}
+
+input FavoriteUpsertWithWhereUniqueWithoutUserInput {
+  where: FavoriteWhereUniqueInput!
+  update: FavoriteUpdateWithoutUserDataInput!
+  create: FavoriteCreateWithoutUserInput!
+}
+
+input FavoriteWhereInput {
+  """Logical AND on all given filters."""
+  AND: [FavoriteWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [FavoriteWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [FavoriteWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  event: EventWhereInput
+  user: UserWhereInput
+}
+
+input FavoriteWhereUniqueInput {
+  id: ID
+}
+
 """Raw JSON value"""
 scalar Json
 
@@ -1024,23 +1285,28 @@ scalar Long
 
 type Mutation {
   createUser(data: UserCreateInput!): User!
-  createEvent(data: EventCreateInput!): Event!
   createCategory(data: CategoryCreateInput!): Category!
+  createFavorite(data: FavoriteCreateInput!): Favorite!
+  createEvent(data: EventCreateInput!): Event!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
-  updateEvent(data: EventUpdateInput!, where: EventWhereUniqueInput!): Event
   updateCategory(data: CategoryUpdateInput!, where: CategoryWhereUniqueInput!): Category
+  updateFavorite(data: FavoriteUpdateInput!, where: FavoriteWhereUniqueInput!): Favorite
+  updateEvent(data: EventUpdateInput!, where: EventWhereUniqueInput!): Event
   deleteUser(where: UserWhereUniqueInput!): User
-  deleteEvent(where: EventWhereUniqueInput!): Event
   deleteCategory(where: CategoryWhereUniqueInput!): Category
+  deleteFavorite(where: FavoriteWhereUniqueInput!): Favorite
+  deleteEvent(where: EventWhereUniqueInput!): Event
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
-  upsertEvent(where: EventWhereUniqueInput!, create: EventCreateInput!, update: EventUpdateInput!): Event!
   upsertCategory(where: CategoryWhereUniqueInput!, create: CategoryCreateInput!, update: CategoryUpdateInput!): Category!
+  upsertFavorite(where: FavoriteWhereUniqueInput!, create: FavoriteCreateInput!, update: FavoriteUpdateInput!): Favorite!
+  upsertEvent(where: EventWhereUniqueInput!, create: EventCreateInput!, update: EventUpdateInput!): Event!
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
-  updateManyEvents(data: EventUpdateManyMutationInput!, where: EventWhereInput): BatchPayload!
   updateManyCategories(data: CategoryUpdateManyMutationInput!, where: CategoryWhereInput): BatchPayload!
+  updateManyEvents(data: EventUpdateManyMutationInput!, where: EventWhereInput): BatchPayload!
   deleteManyUsers(where: UserWhereInput): BatchPayload!
-  deleteManyEvents(where: EventWhereInput): BatchPayload!
   deleteManyCategories(where: CategoryWhereInput): BatchPayload!
+  deleteManyFavorites(where: FavoriteWhereInput): BatchPayload!
+  deleteManyEvents(where: EventWhereInput): BatchPayload!
   executeRaw(database: PrismaDatabase, query: String!): Json!
 }
 
@@ -1077,14 +1343,17 @@ enum PrismaDatabase {
 
 type Query {
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
-  events(where: EventWhereInput, orderBy: EventOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Event]!
   categories(where: CategoryWhereInput, orderBy: CategoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Category]!
+  favorites(where: FavoriteWhereInput, orderBy: FavoriteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Favorite]!
+  events(where: EventWhereInput, orderBy: EventOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Event]!
   user(where: UserWhereUniqueInput!): User
-  event(where: EventWhereUniqueInput!): Event
   category(where: CategoryWhereUniqueInput!): Category
+  favorite(where: FavoriteWhereUniqueInput!): Favorite
+  event(where: EventWhereUniqueInput!): Event
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
-  eventsConnection(where: EventWhereInput, orderBy: EventOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): EventConnection!
   categoriesConnection(where: CategoryWhereInput, orderBy: CategoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CategoryConnection!
+  favoritesConnection(where: FavoriteWhereInput, orderBy: FavoriteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): FavoriteConnection!
+  eventsConnection(where: EventWhereInput, orderBy: EventOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): EventConnection!
 
   """Fetches an object given its ID"""
   node(
@@ -1095,8 +1364,9 @@ type Query {
 
 type Subscription {
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
-  event(where: EventSubscriptionWhereInput): EventSubscriptionPayload
   category(where: CategorySubscriptionWhereInput): CategorySubscriptionPayload
+  favorite(where: FavoriteSubscriptionWhereInput): FavoriteSubscriptionPayload
+  event(where: EventSubscriptionWhereInput): EventSubscriptionPayload
 }
 
 type User implements Node {
@@ -1104,11 +1374,12 @@ type User implements Node {
   name: String!
   email: String!
   password: String!
-  token: String!
+  token: String
   createdAt: DateTime!
   updatedAt: DateTime!
   status: userStatus!
   events(where: EventWhereInput, orderBy: EventOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Event!]
+  favorites(where: FavoriteWhereInput, orderBy: FavoriteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Favorite!]
 }
 
 """A connection to a list of items."""
@@ -1126,9 +1397,10 @@ input UserCreateInput {
   name: String!
   email: String!
   password: String!
-  token: String!
+  token: String
   status: userStatus
   events: EventCreateManyWithoutUsersInput
+  favorites: FavoriteCreateManyWithoutUserInput
 }
 
 input UserCreateManyWithoutEventsInput {
@@ -1136,13 +1408,29 @@ input UserCreateManyWithoutEventsInput {
   connect: [UserWhereUniqueInput!]
 }
 
+input UserCreateOneWithoutFavoritesInput {
+  create: UserCreateWithoutFavoritesInput
+  connect: UserWhereUniqueInput
+}
+
 input UserCreateWithoutEventsInput {
   id: ID
   name: String!
   email: String!
   password: String!
-  token: String!
+  token: String
   status: userStatus
+  favorites: FavoriteCreateManyWithoutUserInput
+}
+
+input UserCreateWithoutFavoritesInput {
+  id: ID
+  name: String!
+  email: String!
+  password: String!
+  token: String
+  status: userStatus
+  events: EventCreateManyWithoutUsersInput
 }
 
 """An edge in a connection."""
@@ -1178,7 +1466,7 @@ type UserPreviousValues {
   name: String!
   email: String!
   password: String!
-  token: String!
+  token: String
   createdAt: DateTime!
   updatedAt: DateTime!
   status: userStatus!
@@ -1500,6 +1788,7 @@ input UserUpdateInput {
   token: String
   status: userStatus
   events: EventUpdateManyWithoutUsersInput
+  favorites: FavoriteUpdateManyWithoutUserInput
 }
 
 input UserUpdateManyDataInput {
@@ -1535,17 +1824,39 @@ input UserUpdateManyWithWhereNestedInput {
   data: UserUpdateManyDataInput!
 }
 
+input UserUpdateOneRequiredWithoutFavoritesInput {
+  create: UserCreateWithoutFavoritesInput
+  connect: UserWhereUniqueInput
+  update: UserUpdateWithoutFavoritesDataInput
+  upsert: UserUpsertWithoutFavoritesInput
+}
+
 input UserUpdateWithoutEventsDataInput {
   name: String
   email: String
   password: String
   token: String
   status: userStatus
+  favorites: FavoriteUpdateManyWithoutUserInput
+}
+
+input UserUpdateWithoutFavoritesDataInput {
+  name: String
+  email: String
+  password: String
+  token: String
+  status: userStatus
+  events: EventUpdateManyWithoutUsersInput
 }
 
 input UserUpdateWithWhereUniqueWithoutEventsInput {
   where: UserWhereUniqueInput!
   data: UserUpdateWithoutEventsDataInput!
+}
+
+input UserUpsertWithoutFavoritesInput {
+  update: UserUpdateWithoutFavoritesDataInput!
+  create: UserCreateWithoutFavoritesInput!
 }
 
 input UserUpsertWithWhereUniqueWithoutEventsInput {
@@ -1820,6 +2131,9 @@ input UserWhereInput {
   events_every: EventWhereInput
   events_some: EventWhereInput
   events_none: EventWhereInput
+  favorites_every: FavoriteWhereInput
+  favorites_some: FavoriteWhereInput
+  favorites_none: FavoriteWhereInput
 }
 
 input UserWhereUniqueInput {

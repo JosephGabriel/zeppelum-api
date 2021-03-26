@@ -3,7 +3,7 @@ type User {
   name: String!
   email: String! @unique
   password: String!
-  token: String!
+  token: String
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
   status: userStatus! @default(value: INATIVO)
@@ -33,7 +33,7 @@ type Category {
 
 type Favorite {
   id: ID! @id
-  events: Event! @relation(name: "FavoriteToEvent", onDelete: SET_NULL)
+  event: Event! @relation(name: "FavoriteToEvent", onDelete: SET_NULL)
   user: User! @relation(name: "UserToFavorite", onDelete: SET_NULL)
 }
 

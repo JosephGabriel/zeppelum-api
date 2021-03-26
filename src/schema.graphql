@@ -1,9 +1,19 @@
 type Query {
-  hello: String
+  users: [User!]!
+  me: User!
 }
 
 type Mutation {
-  hello: String
+  createUser(data: CreateUserInput!): User!
+  updateUser(data: UpdateUserInput!): User!
+  deleteUser: User!
+
+  createEvent(data: CreateEventInput!): Event!
+  updateEvent(data: UpdateEventInput!): Event!
+
+  createCategory(data: CreateCategoryInput!): Category!
+  updateCategory(data: UpdateCategoryInput!): Category!
+  deleteCategory(id: ID!): Category!
 }
 
 type User {
@@ -12,6 +22,7 @@ type User {
   email: String
   password: String!
   token: String
+  favorites: [Favorite]!
   createdAt: String!
   updatedAt: String!
   status: userStatus!
@@ -27,13 +38,62 @@ type Event {
   status: eventStatus!
   category: Category!
   eventType: eventType!
-  schedule: [String!]!
 }
 
 type Category {
   id: ID!
   name: String!
-  event: [Event!]!
+  events: [Event!]!
+}
+
+type Favorite {
+  id: ID!
+  event: Event!
+  user: User!
+}
+
+input CreateUserInput {
+  name: String!
+  email: String!
+  password: String!
+}
+
+input UpdateUserInput {
+  name: String
+  email: String
+  password: String
+}
+
+input CreateEventInput {
+  img: String!
+  title: String!
+  price: Float!
+  dateStart: String!
+  dateEnd: String!
+  status: eventStatus
+  category: String!
+  eventType: eventType
+}
+
+input UpdateEventInput {
+  id: ID!
+  img: String
+  title: String
+  price: Float
+  dateStart: String
+  dateEnd: String
+  status: eventStatus
+  category: String
+  eventType: eventType
+}
+
+input CreateCategoryInput {
+  name: String!
+}
+
+input UpdateCategoryInput {
+  id: ID!
+  name: String
 }
 
 enum userStatus {
