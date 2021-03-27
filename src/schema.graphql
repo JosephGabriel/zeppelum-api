@@ -4,19 +4,19 @@
 # import EventOrderByInput from "./generated/prisma.graphql"
 
 type Query {
-  users: [User!]!
-
+  users(query: String, first: Int, skip: Int, orderBy: UserOrderByInput): [User!]!
+  
   me: User!
 
-  categories: [Category!]!
+  categories(query: String, first: Int, skip: Int, orderBy: CategoryOrderByInput): [Category!]!
 
-  favorites: [Favorite!]!
+  favorites(query: String, first: Int, skip: Int, orderBy: FavoriteOrderByInput): [Favorite!]!
 
   event(id: ID!): Event!
 
-  events(query: String, first: Int, skip: Int): [Event!]!
+  events(query: String, first: Int, skip: Int, orderBy: UserOrderByInput): [Event!]!
 
-  relatedEvents(query: String, first: Int, skip: Int): [Event!]!
+  relatedEvents(query: String, first: Int, skip: Int, orderBy: EventOrderByInput): [Event!]!
 }
 
 type Mutation {

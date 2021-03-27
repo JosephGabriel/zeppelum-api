@@ -1,8 +1,20 @@
 import { getUserId } from "../../utils/utils";
 
 export const Query = {
-  async users(parent, args, { prisma }, info) {
-    const opArgs = {};
+  async users(parent,  { query, first, skip, orderBy }, { prisma }, info) {
+    const opArgs = {
+      first,
+      skip,
+      orderBy
+    };
+
+    if (query) {
+      opArgs.where.OR = [
+        {
+          name_contains: query,
+        },
+      ];
+    }
 
     const users = await prisma.query.users(opArgs, info);
 
@@ -52,10 +64,11 @@ export const Query = {
     return events;
   },
 
-  async relatedEvents(parent, { query, first, skip }, { prisma }, info) {
+  async relatedEvents(parent, { query, first, skip, orderBy }, { prisma }, info) {
     const opArgs = {
       first,
       skip,
+      orderBy,
     };
 
     opArgs.where = {
@@ -67,17 +80,40 @@ export const Query = {
     return events;
   },
 
-  async categories(parent, args, { prisma }, info) {
-    const categories = await prisma.query.categories({}, info);
+  async categories(parent,  { query, first, skip, orderBy }, { prisma }, info) {
+    const opArgs = {
+      first,
+      skip,
+      orderBy,
+    };
+
+    if (query) {
+      opArgs.where.OR = [
+        {
+          name_contains: query,
+        },
+      ];
+    }
+
+
+    const categories = await prisma.query.categories(opArgs, info);
 
     return categories;
   },
 
-  async favorites(parent, args, { prisma, request }, info) {
+  async favorites(parent, {  first, skip, orderBy }, { prisma, request }, info) {
+    
+    const opArgs = {
+      first,
+      skip,
+      orderBy,
+    };
+
     const userId = await getUserId(request);
 
     const favorites = await prisma.query.favorites(
       {
+        ...opArgs,
         where: {
           user: {
             id: userId,
