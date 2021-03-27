@@ -4,6 +4,10 @@ type Query {
   users: [User!]!
   me: User!
 
+  categories: [Category!]!
+
+  favorites: [Favorite!]!
+
   event(id: ID!): Event!
   events(query: String, first: Int, skip: Int): [Event!]!
   relatedEvents(query: String, first: Int, skip: Int): [Event!]!
@@ -114,8 +118,8 @@ input UpdateCategoryInput {
 }
 
 input CreateFavoriteInput {
-  event: Event!
-  user: User!
+  event: ID!
+  user: ID!
 }
 
 enum userStatus {

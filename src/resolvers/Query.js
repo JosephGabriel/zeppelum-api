@@ -66,4 +66,27 @@ export const Query = {
 
     return events;
   },
+
+  async categories(parent, args, { prisma }, info) {
+    const categories = await prisma.query.categories({}, info);
+
+    return categories;
+  },
+
+  async favorites(parent, args, { prisma, request }, info) {
+    const userId = await getUserId(request);
+
+    const favorites = await prisma.query.favorites(
+      {
+        where: {
+          user: {
+            id: userId,
+          },
+        },
+      },
+      info
+    );
+
+    return favorites;
+  },
 };

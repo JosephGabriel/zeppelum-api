@@ -3,10 +3,7 @@ import { generateToken, hashPassword, getUserId } from "../../utils/utils";
 
 export const Mutation = {
   async logginUser(parent, { data }, { prisma }, info) {
-    const user = await prisma.query.user(
-      { where: { email: data.email } },
-      info
-    );
+    const user = await prisma.query.user({ where: { email: data.email } });
 
     if (!user) {
       throw new Error("Email ou Senha Inválido");
@@ -15,7 +12,7 @@ export const Mutation = {
     const passwordMatch = await bcrypt.compare(data.password, user.password);
 
     if (!passwordMatch) {
-      throw new Error("Email ou Senha Inválido");
+      throw new Error("Email ou Senha Inválido2");
     }
 
     return user;
