@@ -4,14 +4,17 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon --exec babel-node src/index --ext graphql,js",
+    "start":"node dist/index",
+    "heroku-postbuild":"babel src --out-dir dist --copy-files",
+    "dev": "nodemon --exec babel-node src/index --ext graphql,js",
     "get-schema": "graphql get-schema -p prisma",
     "test": "jest --watch --runInBand"
   },
   "keywords": [],
-  "author": "",
+  "author": "Joseph Gabriel",
   "license": "ISC",
   "dependencies": {
+    "@apollo/client": "^3.3.13",
     "@babel/cli": "^7.13.10",
     "@babel/core": "^7.13.10",
     "@babel/node": "^7.13.12",

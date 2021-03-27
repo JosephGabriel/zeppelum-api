@@ -12,7 +12,7 @@ export const Mutation = {
     const passwordMatch = await bcrypt.compare(data.password, user.password);
 
     if (!passwordMatch) {
-      throw new Error("Email ou Senha Inválido2");
+      throw new Error("Email ou Senha Inválido");
     }
 
     return user;
@@ -25,18 +25,18 @@ export const Mutation = {
       throw new Error("Email em uso");
     }
 
-    const password = await hashPassword(data.password);
+    const passwordHash = await hashPassword(data.password);
 
     const user = await prisma.mutation.createUser({
       data: {
         ...data,
-        password,
+        password:passwordHash,
       },
     });
 
     const result = await prisma.mutation.updateUser(
       {
-        data: { ...data, token: generateToken(user.id) },
+        data: { token: generateToken(user.id) },
         where: { id: user.id },
       },
       info
