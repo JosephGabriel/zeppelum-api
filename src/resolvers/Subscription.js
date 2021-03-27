@@ -14,21 +14,6 @@ export const Subscription = {
     },
   },
 
-  users: {
-    subscribe(parent, { id }, { prisma }, info) {
-      return prisma.subscription.user(
-        {
-          where: {
-            node: {
-              id,
-            },
-          },
-        },
-        info
-      );
-    },
-  },
-
   category: {
     subscribe(parent, { id }, { prisma }, info) {
       return prisma.subscription.category(
@@ -59,24 +44,7 @@ export const Subscription = {
     },
   },
 
-  events: {
-    subscribe(parent, { id }, { prisma }, info) {
-      return prisma.subscription.event(
-        {
-          where: {
-            node: {
-              category: {
-                id,
-              },
-            },
-          },
-        },
-        info
-      );
-    },
-  },
-
-  favorites: {
+  favorite: {
     subscribe(parent, { id }, { prisma }, info) {
       return prisma.subscription.favorite(
         {
