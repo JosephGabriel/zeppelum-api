@@ -21,4 +21,49 @@ export const Query = {
 
     return user;
   },
+
+  async event(parent, { id }, { prisma }, info) {
+    const event = await prisma.query.event({ where: { id } }, info);
+
+    if (!event) {
+      throw new Error("Evento inválido");
+    }
+
+    return event;
+  },
+
+  async events(parent, { query, first, skip, orderBy }, { prisma }, info) {
+    const opArgs = {
+      first,
+      skip,
+      orderBy,
+    };
+
+    if (query) {
+      opArgs.where.OR = [
+        {
+          title_contains: query,
+        },
+      ];
+    }
+
+    const events = await prisma.query.events(opArgs, info);
+
+    return events;
+  },
+
+  async relatedEvents(parent, { query, first, skip }, { prisma }, info) {
+    const opArgs = {
+      first,
+      skip,
+    };
+
+    opArgs.where = {
+      title_contains: query,
+    };
+
+    const events = await prisma.query.events(opArgs, info);
+
+    return events;
+  },
 };
