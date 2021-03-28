@@ -1,5 +1,6 @@
+import "@babel/polyfill";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
+import { generateToken } from "../utils/utils";
 import { prisma } from "../src/prisma";
 
 export const userOne = {
@@ -39,56 +40,67 @@ export const eventOne = {
 };
 
 export const favoriteOne = {
-    favorite: null
-}
+  favorite: null,
+};
 
-export const seedDatebase = () => {
-    await prisma.mutation.deleteManyUsers();
-    await prisma.mutation.deleteManyEvents();
-    await prisma.mutation.deleteManyFavorites();
-    await prisma.mutation.deleteManyCategories();
-
+export const seedDatebase = async () => {
+  await prisma.mutation.deleteManyUsers();
+  await prisma.mutation.deleteManyEvents();
+  await prisma.mutation.deleteManyFavorites();
+  await prisma.mutation.deleteManyCategories();
 
   userOne.user = await prisma.mutation.createUser({
     data: userOne.input,
+  });
+
+  const token = generateToken(userOne.user.id);
+
+  userOne.user = await prisma.mutation.updateUser({
+    data: { token },
+    where: { id: userOne.user.id },
   });
 
   userTwo.user = await prisma.mutation.createUser({
     data: userTwo.input,
   });
 
+  // userTwo.user = await prisma.mutation.updateUser({
+  //   data: { token: generateToken(userTwo.user.id) },
+  //   where: { id: userTwo.user.id },
+  // });
+
   categoryOne.category = await prisma.mutation.createCategory({
-      data:userOne.input,
-  })
+    data: categoryOne.input,
+  });
 
   eventOne.event = await prisma.mutation.createEvent({
-      data:{
-          ...userOne.input,
-          category:{
-              connect:{
-                  id: categoryOne.category.id
-              }
-          },
-          users: { 
-              connect: { 
-                  id: userOne.user.id 
-            } 
-        }
-      }
-  })
+    data: {
+      ...eventOne.input,
+      category: {
+        connect: {
+          id: categoryOne.category.id,
+        },
+      },
+      users: {
+        connect: {
+          id: userOne.user.id,
+        },
+      },
+    },
+  });
 
   favoriteOne.favorite = await prisma.mutation.createFavorite({
-    data: { 
-        event: {
-             connect: {
-                  id: eventOne.event.id
-            } 
+    data: {
+      event: {
+        connect: {
+          id: eventOne.event.id,
         },
-        user: { 
-            connect: {
-                 id: userOne.user.id
-            } 
-        }
-    }
-  })
-}
+      },
+      user: {
+        connect: {
+          id: userOne.user.id,
+        },
+      },
+    },
+  });
+};
