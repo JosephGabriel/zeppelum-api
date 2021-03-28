@@ -128,7 +128,7 @@ input CreateEventInput {
   dateStart: String!
   dateEnd: String!
   status: eventStatus
-  category: String!
+  category: ID!
   eventType: eventType
 }
 

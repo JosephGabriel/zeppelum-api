@@ -30,7 +30,7 @@ export const Mutation = {
     const user = await prisma.mutation.createUser({
       data: {
         ...data,
-        password:passwordHash,
+        password: passwordHash,
       },
     });
 
@@ -105,15 +105,17 @@ export const Mutation = {
 
     const event = await prisma.mutation.createEvent(
       {
-        ...data,
-        category: {
-          connect: {
-            id: data.category,
+        data: {
+          ...data,
+          category: {
+            connect: {
+              id: data.category,
+            },
           },
-        },
-        users: {
-          connect: {
-            id: userId,
+          users: {
+            connect: {
+              id: userId,
+            },
           },
         },
       },
