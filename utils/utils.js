@@ -17,7 +17,7 @@ export const hashPassword = (password) => {
 // com validade de 1 semana, o id recebe o nome de payload,
 
 export const generateToken = (payload) => {
-  return jwt.sign({ userId: payload }, "zeppelum", { expiresIn: "7d" });
+  return jwt.sign({ userId: payload }, process.env.PRISMA_AUTH_SECRET);
 };
 
 // a função getUserId recebe 2 parâmetros,
