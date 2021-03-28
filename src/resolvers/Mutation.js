@@ -97,9 +97,9 @@ export const Mutation = {
       throw new Error("Usuário inválido");
     }
 
-    const postExists = await prisma.exists.Post({ id: data.category });
+    const categoryExists = await prisma.exists.Category({ id: data.category });
 
-    if (!postExists) {
+    if (!categoryExists) {
       throw new Error("Categoria inválida");
     }
 
