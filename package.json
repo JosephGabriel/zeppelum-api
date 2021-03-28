@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "babel-node src/index",
+    "start": "node src/index",
+    "heroku-postbuild": "cd prisma && docker-compose up -d",
     "dev": "nodemon --exec babel-node src/index --ext graphql,js",
     "get-schema": "graphql get-schema -p prisma",
     "test": "jest --watch --runInBand"
