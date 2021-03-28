@@ -4,8 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node dist/index",
-    "heroku-postbuild": "babel src --out-dir dist --copy-files",
+    "start": "babel-node src/index",
     "dev": "nodemon --exec babel-node src/index --ext graphql,js",
     "get-schema": "graphql get-schema -p prisma",
     "test": "jest --watch --runInBand"
