@@ -1,7 +1,12 @@
 import "cross-fetch/polyfill";
 import { getClient } from "../utils/apollo";
 import { seedDatebase, userOne } from "../utils/test.utils";
-import { logginUser, createUser, updateUser, deleteUser } from "../utils/user.operations";
+import {
+  logginUser,
+  createUser,
+  updateUser,
+  deleteUser,
+} from "../utils/user.operations";
 
 beforeEach(seedDatebase);
 
