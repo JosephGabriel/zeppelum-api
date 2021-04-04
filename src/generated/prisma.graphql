@@ -1,5 +1,443 @@
 # source: http://localhost:4466
-# timestamp: Wed Mar 24 2021 21:25:43 GMT-0300 (Horário Padrão de Brasília)
+# timestamp: Sat Apr 03 2021 16:28:32 GMT-0300 (Horário Padrão de Brasília)
+
+type Admin implements Node {
+  id: ID!
+  name: String!
+  email: String!
+  password: String!
+  token: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  status: userStatus!
+  events(where: EventWhereInput, orderBy: EventOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Event!]
+}
+
+"""A connection to a list of items."""
+type AdminConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [AdminEdge]!
+  aggregate: AggregateAdmin!
+}
+
+input AdminCreateInput {
+  id: ID
+  name: String!
+  email: String!
+  password: String!
+  token: String
+  status: userStatus
+  events: EventCreateManyWithoutAdminInput
+}
+
+input AdminCreateOneWithoutEventsInput {
+  create: AdminCreateWithoutEventsInput
+  connect: AdminWhereUniqueInput
+}
+
+input AdminCreateWithoutEventsInput {
+  id: ID
+  name: String!
+  email: String!
+  password: String!
+  token: String
+  status: userStatus
+}
+
+"""An edge in a connection."""
+type AdminEdge {
+  """The item at the end of the edge."""
+  node: Admin!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum AdminOrderByInput {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+  email_ASC
+  email_DESC
+  password_ASC
+  password_DESC
+  token_ASC
+  token_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  status_ASC
+  status_DESC
+}
+
+type AdminPreviousValues {
+  id: ID!
+  name: String!
+  email: String!
+  password: String!
+  token: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  status: userStatus!
+}
+
+type AdminSubscriptionPayload {
+  mutation: MutationType!
+  node: Admin
+  updatedFields: [String!]
+  previousValues: AdminPreviousValues
+}
+
+input AdminSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [AdminSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [AdminSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [AdminSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: AdminWhereInput
+}
+
+input AdminUpdateInput {
+  name: String
+  email: String
+  password: String
+  token: String
+  status: userStatus
+  events: EventUpdateManyWithoutAdminInput
+}
+
+input AdminUpdateManyMutationInput {
+  name: String
+  email: String
+  password: String
+  token: String
+  status: userStatus
+}
+
+input AdminUpdateOneRequiredWithoutEventsInput {
+  create: AdminCreateWithoutEventsInput
+  connect: AdminWhereUniqueInput
+  update: AdminUpdateWithoutEventsDataInput
+  upsert: AdminUpsertWithoutEventsInput
+}
+
+input AdminUpdateWithoutEventsDataInput {
+  name: String
+  email: String
+  password: String
+  token: String
+  status: userStatus
+}
+
+input AdminUpsertWithoutEventsInput {
+  update: AdminUpdateWithoutEventsDataInput!
+  create: AdminCreateWithoutEventsInput!
+}
+
+input AdminWhereInput {
+  """Logical AND on all given filters."""
+  AND: [AdminWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [AdminWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [AdminWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  name: String
+
+  """All values that are not equal to given value."""
+  name_not: String
+
+  """All values that are contained in given list."""
+  name_in: [String!]
+
+  """All values that are not contained in given list."""
+  name_not_in: [String!]
+
+  """All values less than the given value."""
+  name_lt: String
+
+  """All values less than or equal the given value."""
+  name_lte: String
+
+  """All values greater than the given value."""
+  name_gt: String
+
+  """All values greater than or equal the given value."""
+  name_gte: String
+
+  """All values containing the given string."""
+  name_contains: String
+
+  """All values not containing the given string."""
+  name_not_contains: String
+
+  """All values starting with the given string."""
+  name_starts_with: String
+
+  """All values not starting with the given string."""
+  name_not_starts_with: String
+
+  """All values ending with the given string."""
+  name_ends_with: String
+
+  """All values not ending with the given string."""
+  name_not_ends_with: String
+  email: String
+
+  """All values that are not equal to given value."""
+  email_not: String
+
+  """All values that are contained in given list."""
+  email_in: [String!]
+
+  """All values that are not contained in given list."""
+  email_not_in: [String!]
+
+  """All values less than the given value."""
+  email_lt: String
+
+  """All values less than or equal the given value."""
+  email_lte: String
+
+  """All values greater than the given value."""
+  email_gt: String
+
+  """All values greater than or equal the given value."""
+  email_gte: String
+
+  """All values containing the given string."""
+  email_contains: String
+
+  """All values not containing the given string."""
+  email_not_contains: String
+
+  """All values starting with the given string."""
+  email_starts_with: String
+
+  """All values not starting with the given string."""
+  email_not_starts_with: String
+
+  """All values ending with the given string."""
+  email_ends_with: String
+
+  """All values not ending with the given string."""
+  email_not_ends_with: String
+  password: String
+
+  """All values that are not equal to given value."""
+  password_not: String
+
+  """All values that are contained in given list."""
+  password_in: [String!]
+
+  """All values that are not contained in given list."""
+  password_not_in: [String!]
+
+  """All values less than the given value."""
+  password_lt: String
+
+  """All values less than or equal the given value."""
+  password_lte: String
+
+  """All values greater than the given value."""
+  password_gt: String
+
+  """All values greater than or equal the given value."""
+  password_gte: String
+
+  """All values containing the given string."""
+  password_contains: String
+
+  """All values not containing the given string."""
+  password_not_contains: String
+
+  """All values starting with the given string."""
+  password_starts_with: String
+
+  """All values not starting with the given string."""
+  password_not_starts_with: String
+
+  """All values ending with the given string."""
+  password_ends_with: String
+
+  """All values not ending with the given string."""
+  password_not_ends_with: String
+  token: String
+
+  """All values that are not equal to given value."""
+  token_not: String
+
+  """All values that are contained in given list."""
+  token_in: [String!]
+
+  """All values that are not contained in given list."""
+  token_not_in: [String!]
+
+  """All values less than the given value."""
+  token_lt: String
+
+  """All values less than or equal the given value."""
+  token_lte: String
+
+  """All values greater than the given value."""
+  token_gt: String
+
+  """All values greater than or equal the given value."""
+  token_gte: String
+
+  """All values containing the given string."""
+  token_contains: String
+
+  """All values not containing the given string."""
+  token_not_contains: String
+
+  """All values starting with the given string."""
+  token_starts_with: String
+
+  """All values not starting with the given string."""
+  token_not_starts_with: String
+
+  """All values ending with the given string."""
+  token_ends_with: String
+
+  """All values not ending with the given string."""
+  token_not_ends_with: String
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
+  status: userStatus
+
+  """All values that are not equal to given value."""
+  status_not: userStatus
+
+  """All values that are contained in given list."""
+  status_in: [userStatus!]
+
+  """All values that are not contained in given list."""
+  status_not_in: [userStatus!]
+  events_every: EventWhereInput
+  events_some: EventWhereInput
+  events_none: EventWhereInput
+}
+
+input AdminWhereUniqueInput {
+  id: ID
+  email: String
+}
+
+type AggregateAdmin {
+  count: Int!
+}
 
 type AggregateCategory {
   count: Int!
@@ -10,6 +448,10 @@ type AggregateEvent {
 }
 
 type AggregateFavorite {
+  count: Int!
+}
+
+type AggregateTicket {
   count: Int!
 }
 
@@ -249,7 +691,8 @@ type Event implements Node {
   status: eventStatus!
   eventType: eventType!
   category: Category!
-  users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
+  tickets(where: TicketWhereInput, orderBy: TicketOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Ticket!]
+  admin: Admin!
 }
 
 """A connection to a list of items."""
@@ -272,7 +715,13 @@ input EventCreateInput {
   status: eventStatus
   eventType: eventType
   category: CategoryCreateOneWithoutEventsInput!
-  users: UserCreateManyWithoutEventsInput
+  tickets: TicketCreateManyWithoutEventInput
+  admin: AdminCreateOneWithoutEventsInput!
+}
+
+input EventCreateManyWithoutAdminInput {
+  create: [EventCreateWithoutAdminInput!]
+  connect: [EventWhereUniqueInput!]
 }
 
 input EventCreateManyWithoutCategoryInput {
@@ -280,14 +729,27 @@ input EventCreateManyWithoutCategoryInput {
   connect: [EventWhereUniqueInput!]
 }
 
-input EventCreateManyWithoutUsersInput {
-  create: [EventCreateWithoutUsersInput!]
-  connect: [EventWhereUniqueInput!]
-}
-
 input EventCreateOneInput {
   create: EventCreateInput
   connect: EventWhereUniqueInput
+}
+
+input EventCreateOneWithoutTicketsInput {
+  create: EventCreateWithoutTicketsInput
+  connect: EventWhereUniqueInput
+}
+
+input EventCreateWithoutAdminInput {
+  id: ID
+  img: String!
+  title: String!
+  price: Float!
+  dateStart: String!
+  dateEnd: String!
+  status: eventStatus
+  eventType: eventType
+  category: CategoryCreateOneWithoutEventsInput!
+  tickets: TicketCreateManyWithoutEventInput
 }
 
 input EventCreateWithoutCategoryInput {
@@ -299,10 +761,11 @@ input EventCreateWithoutCategoryInput {
   dateEnd: String!
   status: eventStatus
   eventType: eventType
-  users: UserCreateManyWithoutEventsInput
+  tickets: TicketCreateManyWithoutEventInput
+  admin: AdminCreateOneWithoutEventsInput!
 }
 
-input EventCreateWithoutUsersInput {
+input EventCreateWithoutTicketsInput {
   id: ID
   img: String!
   title: String!
@@ -312,6 +775,7 @@ input EventCreateWithoutUsersInput {
   status: eventStatus
   eventType: eventType
   category: CategoryCreateOneWithoutEventsInput!
+  admin: AdminCreateOneWithoutEventsInput!
 }
 
 """An edge in a connection."""
@@ -665,7 +1129,8 @@ input EventUpdateDataInput {
   status: eventStatus
   eventType: eventType
   category: CategoryUpdateOneRequiredWithoutEventsInput
-  users: UserUpdateManyWithoutEventsInput
+  tickets: TicketUpdateManyWithoutEventInput
+  admin: AdminUpdateOneRequiredWithoutEventsInput
 }
 
 input EventUpdateInput {
@@ -677,7 +1142,8 @@ input EventUpdateInput {
   status: eventStatus
   eventType: eventType
   category: CategoryUpdateOneRequiredWithoutEventsInput
-  users: UserUpdateManyWithoutEventsInput
+  tickets: TicketUpdateManyWithoutEventInput
+  admin: AdminUpdateOneRequiredWithoutEventsInput
 }
 
 input EventUpdateManyDataInput {
@@ -700,6 +1166,18 @@ input EventUpdateManyMutationInput {
   eventType: eventType
 }
 
+input EventUpdateManyWithoutAdminInput {
+  create: [EventCreateWithoutAdminInput!]
+  connect: [EventWhereUniqueInput!]
+  set: [EventWhereUniqueInput!]
+  disconnect: [EventWhereUniqueInput!]
+  delete: [EventWhereUniqueInput!]
+  update: [EventUpdateWithWhereUniqueWithoutAdminInput!]
+  updateMany: [EventUpdateManyWithWhereNestedInput!]
+  deleteMany: [EventScalarWhereInput!]
+  upsert: [EventUpsertWithWhereUniqueWithoutAdminInput!]
+}
+
 input EventUpdateManyWithoutCategoryInput {
   create: [EventCreateWithoutCategoryInput!]
   connect: [EventWhereUniqueInput!]
@@ -710,18 +1188,6 @@ input EventUpdateManyWithoutCategoryInput {
   updateMany: [EventUpdateManyWithWhereNestedInput!]
   deleteMany: [EventScalarWhereInput!]
   upsert: [EventUpsertWithWhereUniqueWithoutCategoryInput!]
-}
-
-input EventUpdateManyWithoutUsersInput {
-  create: [EventCreateWithoutUsersInput!]
-  connect: [EventWhereUniqueInput!]
-  set: [EventWhereUniqueInput!]
-  disconnect: [EventWhereUniqueInput!]
-  delete: [EventWhereUniqueInput!]
-  update: [EventUpdateWithWhereUniqueWithoutUsersInput!]
-  updateMany: [EventUpdateManyWithWhereNestedInput!]
-  deleteMany: [EventScalarWhereInput!]
-  upsert: [EventUpsertWithWhereUniqueWithoutUsersInput!]
 }
 
 input EventUpdateManyWithWhereNestedInput {
@@ -736,18 +1202,14 @@ input EventUpdateOneRequiredInput {
   upsert: EventUpsertNestedInput
 }
 
-input EventUpdateWithoutCategoryDataInput {
-  img: String
-  title: String
-  price: Float
-  dateStart: String
-  dateEnd: String
-  status: eventStatus
-  eventType: eventType
-  users: UserUpdateManyWithoutEventsInput
+input EventUpdateOneRequiredWithoutTicketsInput {
+  create: EventCreateWithoutTicketsInput
+  connect: EventWhereUniqueInput
+  update: EventUpdateWithoutTicketsDataInput
+  upsert: EventUpsertWithoutTicketsInput
 }
 
-input EventUpdateWithoutUsersDataInput {
+input EventUpdateWithoutAdminDataInput {
   img: String
   title: String
   price: Float
@@ -756,6 +1218,36 @@ input EventUpdateWithoutUsersDataInput {
   status: eventStatus
   eventType: eventType
   category: CategoryUpdateOneRequiredWithoutEventsInput
+  tickets: TicketUpdateManyWithoutEventInput
+}
+
+input EventUpdateWithoutCategoryDataInput {
+  img: String
+  title: String
+  price: Float
+  dateStart: String
+  dateEnd: String
+  status: eventStatus
+  eventType: eventType
+  tickets: TicketUpdateManyWithoutEventInput
+  admin: AdminUpdateOneRequiredWithoutEventsInput
+}
+
+input EventUpdateWithoutTicketsDataInput {
+  img: String
+  title: String
+  price: Float
+  dateStart: String
+  dateEnd: String
+  status: eventStatus
+  eventType: eventType
+  category: CategoryUpdateOneRequiredWithoutEventsInput
+  admin: AdminUpdateOneRequiredWithoutEventsInput
+}
+
+input EventUpdateWithWhereUniqueWithoutAdminInput {
+  where: EventWhereUniqueInput!
+  data: EventUpdateWithoutAdminDataInput!
 }
 
 input EventUpdateWithWhereUniqueWithoutCategoryInput {
@@ -763,26 +1255,26 @@ input EventUpdateWithWhereUniqueWithoutCategoryInput {
   data: EventUpdateWithoutCategoryDataInput!
 }
 
-input EventUpdateWithWhereUniqueWithoutUsersInput {
-  where: EventWhereUniqueInput!
-  data: EventUpdateWithoutUsersDataInput!
-}
-
 input EventUpsertNestedInput {
   update: EventUpdateDataInput!
   create: EventCreateInput!
+}
+
+input EventUpsertWithoutTicketsInput {
+  update: EventUpdateWithoutTicketsDataInput!
+  create: EventCreateWithoutTicketsInput!
+}
+
+input EventUpsertWithWhereUniqueWithoutAdminInput {
+  where: EventWhereUniqueInput!
+  update: EventUpdateWithoutAdminDataInput!
+  create: EventCreateWithoutAdminInput!
 }
 
 input EventUpsertWithWhereUniqueWithoutCategoryInput {
   where: EventWhereUniqueInput!
   update: EventUpdateWithoutCategoryDataInput!
   create: EventCreateWithoutCategoryInput!
-}
-
-input EventUpsertWithWhereUniqueWithoutUsersInput {
-  where: EventWhereUniqueInput!
-  update: EventUpdateWithoutUsersDataInput!
-  create: EventCreateWithoutUsersInput!
 }
 
 input EventWhereInput {
@@ -1037,9 +1529,10 @@ input EventWhereInput {
   """All values that are not contained in given list."""
   eventType_not_in: [eventType!]
   category: CategoryWhereInput
-  users_every: UserWhereInput
-  users_some: UserWhereInput
-  users_none: UserWhereInput
+  tickets_every: TicketWhereInput
+  tickets_some: TicketWhereInput
+  tickets_none: TicketWhereInput
+  admin: AdminWhereInput
 }
 
 input EventWhereUniqueInput {
@@ -1285,27 +1778,38 @@ scalar Long
 
 type Mutation {
   createUser(data: UserCreateInput!): User!
+  createAdmin(data: AdminCreateInput!): Admin!
   createCategory(data: CategoryCreateInput!): Category!
   createFavorite(data: FavoriteCreateInput!): Favorite!
+  createTicket(data: TicketCreateInput!): Ticket!
   createEvent(data: EventCreateInput!): Event!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
+  updateAdmin(data: AdminUpdateInput!, where: AdminWhereUniqueInput!): Admin
   updateCategory(data: CategoryUpdateInput!, where: CategoryWhereUniqueInput!): Category
   updateFavorite(data: FavoriteUpdateInput!, where: FavoriteWhereUniqueInput!): Favorite
+  updateTicket(data: TicketUpdateInput!, where: TicketWhereUniqueInput!): Ticket
   updateEvent(data: EventUpdateInput!, where: EventWhereUniqueInput!): Event
   deleteUser(where: UserWhereUniqueInput!): User
+  deleteAdmin(where: AdminWhereUniqueInput!): Admin
   deleteCategory(where: CategoryWhereUniqueInput!): Category
   deleteFavorite(where: FavoriteWhereUniqueInput!): Favorite
+  deleteTicket(where: TicketWhereUniqueInput!): Ticket
   deleteEvent(where: EventWhereUniqueInput!): Event
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
+  upsertAdmin(where: AdminWhereUniqueInput!, create: AdminCreateInput!, update: AdminUpdateInput!): Admin!
   upsertCategory(where: CategoryWhereUniqueInput!, create: CategoryCreateInput!, update: CategoryUpdateInput!): Category!
   upsertFavorite(where: FavoriteWhereUniqueInput!, create: FavoriteCreateInput!, update: FavoriteUpdateInput!): Favorite!
+  upsertTicket(where: TicketWhereUniqueInput!, create: TicketCreateInput!, update: TicketUpdateInput!): Ticket!
   upsertEvent(where: EventWhereUniqueInput!, create: EventCreateInput!, update: EventUpdateInput!): Event!
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
+  updateManyAdmins(data: AdminUpdateManyMutationInput!, where: AdminWhereInput): BatchPayload!
   updateManyCategories(data: CategoryUpdateManyMutationInput!, where: CategoryWhereInput): BatchPayload!
   updateManyEvents(data: EventUpdateManyMutationInput!, where: EventWhereInput): BatchPayload!
   deleteManyUsers(where: UserWhereInput): BatchPayload!
+  deleteManyAdmins(where: AdminWhereInput): BatchPayload!
   deleteManyCategories(where: CategoryWhereInput): BatchPayload!
   deleteManyFavorites(where: FavoriteWhereInput): BatchPayload!
+  deleteManyTickets(where: TicketWhereInput): BatchPayload!
   deleteManyEvents(where: EventWhereInput): BatchPayload!
   executeRaw(database: PrismaDatabase, query: String!): Json!
 }
@@ -1343,16 +1847,22 @@ enum PrismaDatabase {
 
 type Query {
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
+  admins(where: AdminWhereInput, orderBy: AdminOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Admin]!
   categories(where: CategoryWhereInput, orderBy: CategoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Category]!
   favorites(where: FavoriteWhereInput, orderBy: FavoriteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Favorite]!
+  tickets(where: TicketWhereInput, orderBy: TicketOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Ticket]!
   events(where: EventWhereInput, orderBy: EventOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Event]!
   user(where: UserWhereUniqueInput!): User
+  admin(where: AdminWhereUniqueInput!): Admin
   category(where: CategoryWhereUniqueInput!): Category
   favorite(where: FavoriteWhereUniqueInput!): Favorite
+  ticket(where: TicketWhereUniqueInput!): Ticket
   event(where: EventWhereUniqueInput!): Event
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
+  adminsConnection(where: AdminWhereInput, orderBy: AdminOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): AdminConnection!
   categoriesConnection(where: CategoryWhereInput, orderBy: CategoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CategoryConnection!
   favoritesConnection(where: FavoriteWhereInput, orderBy: FavoriteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): FavoriteConnection!
+  ticketsConnection(where: TicketWhereInput, orderBy: TicketOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): TicketConnection!
   eventsConnection(where: EventWhereInput, orderBy: EventOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): EventConnection!
 
   """Fetches an object given its ID"""
@@ -1364,123 +1874,82 @@ type Query {
 
 type Subscription {
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
+  admin(where: AdminSubscriptionWhereInput): AdminSubscriptionPayload
   category(where: CategorySubscriptionWhereInput): CategorySubscriptionPayload
   favorite(where: FavoriteSubscriptionWhereInput): FavoriteSubscriptionPayload
+  ticket(where: TicketSubscriptionWhereInput): TicketSubscriptionPayload
   event(where: EventSubscriptionWhereInput): EventSubscriptionPayload
 }
 
-type User implements Node {
+type Ticket implements Node {
   id: ID!
-  name: String!
-  email: String!
-  password: String!
-  token: String
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  status: userStatus!
-  events(where: EventWhereInput, orderBy: EventOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Event!]
-  favorites(where: FavoriteWhereInput, orderBy: FavoriteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Favorite!]
+  event: Event!
+  user: User!
 }
 
 """A connection to a list of items."""
-type UserConnection {
+type TicketConnection {
   """Information to aid in pagination."""
   pageInfo: PageInfo!
 
   """A list of edges."""
-  edges: [UserEdge]!
-  aggregate: AggregateUser!
+  edges: [TicketEdge]!
+  aggregate: AggregateTicket!
 }
 
-input UserCreateInput {
+input TicketCreateInput {
   id: ID
-  name: String!
-  email: String!
-  password: String!
-  token: String
-  status: userStatus
-  events: EventCreateManyWithoutUsersInput
-  favorites: FavoriteCreateManyWithoutUserInput
+  event: EventCreateOneWithoutTicketsInput!
+  user: UserCreateOneWithoutTicketsInput!
 }
 
-input UserCreateManyWithoutEventsInput {
-  create: [UserCreateWithoutEventsInput!]
-  connect: [UserWhereUniqueInput!]
+input TicketCreateManyWithoutEventInput {
+  create: [TicketCreateWithoutEventInput!]
+  connect: [TicketWhereUniqueInput!]
 }
 
-input UserCreateOneWithoutFavoritesInput {
-  create: UserCreateWithoutFavoritesInput
-  connect: UserWhereUniqueInput
+input TicketCreateManyWithoutUserInput {
+  create: [TicketCreateWithoutUserInput!]
+  connect: [TicketWhereUniqueInput!]
 }
 
-input UserCreateWithoutEventsInput {
+input TicketCreateWithoutEventInput {
   id: ID
-  name: String!
-  email: String!
-  password: String!
-  token: String
-  status: userStatus
-  favorites: FavoriteCreateManyWithoutUserInput
+  user: UserCreateOneWithoutTicketsInput!
 }
 
-input UserCreateWithoutFavoritesInput {
+input TicketCreateWithoutUserInput {
   id: ID
-  name: String!
-  email: String!
-  password: String!
-  token: String
-  status: userStatus
-  events: EventCreateManyWithoutUsersInput
+  event: EventCreateOneWithoutTicketsInput!
 }
 
 """An edge in a connection."""
-type UserEdge {
+type TicketEdge {
   """The item at the end of the edge."""
-  node: User!
+  node: Ticket!
 
   """A cursor for use in pagination."""
   cursor: String!
 }
 
-enum UserOrderByInput {
+enum TicketOrderByInput {
   id_ASC
   id_DESC
-  name_ASC
-  name_DESC
-  email_ASC
-  email_DESC
-  password_ASC
-  password_DESC
-  token_ASC
-  token_DESC
-  createdAt_ASC
-  createdAt_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-  status_ASC
-  status_DESC
 }
 
-type UserPreviousValues {
+type TicketPreviousValues {
   id: ID!
-  name: String!
-  email: String!
-  password: String!
-  token: String
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  status: userStatus!
 }
 
-input UserScalarWhereInput {
+input TicketScalarWhereInput {
   """Logical AND on all given filters."""
-  AND: [UserScalarWhereInput!]
+  AND: [TicketScalarWhereInput!]
 
   """Logical OR on all given filters."""
-  OR: [UserScalarWhereInput!]
+  OR: [TicketScalarWhereInput!]
 
   """Logical NOT on all given filters combined by AND."""
-  NOT: [UserScalarWhereInput!]
+  NOT: [TicketScalarWhereInput!]
   id: ID
 
   """All values that are not equal to given value."""
@@ -1521,220 +1990,262 @@ input UserScalarWhereInput {
 
   """All values not ending with the given string."""
   id_not_ends_with: ID
-  name: String
+}
+
+type TicketSubscriptionPayload {
+  mutation: MutationType!
+  node: Ticket
+  updatedFields: [String!]
+  previousValues: TicketPreviousValues
+}
+
+input TicketSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [TicketSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [TicketSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [TicketSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: TicketWhereInput
+}
+
+input TicketUpdateInput {
+  event: EventUpdateOneRequiredWithoutTicketsInput
+  user: UserUpdateOneRequiredWithoutTicketsInput
+}
+
+input TicketUpdateManyWithoutEventInput {
+  create: [TicketCreateWithoutEventInput!]
+  connect: [TicketWhereUniqueInput!]
+  set: [TicketWhereUniqueInput!]
+  disconnect: [TicketWhereUniqueInput!]
+  delete: [TicketWhereUniqueInput!]
+  update: [TicketUpdateWithWhereUniqueWithoutEventInput!]
+  deleteMany: [TicketScalarWhereInput!]
+  upsert: [TicketUpsertWithWhereUniqueWithoutEventInput!]
+}
+
+input TicketUpdateManyWithoutUserInput {
+  create: [TicketCreateWithoutUserInput!]
+  connect: [TicketWhereUniqueInput!]
+  set: [TicketWhereUniqueInput!]
+  disconnect: [TicketWhereUniqueInput!]
+  delete: [TicketWhereUniqueInput!]
+  update: [TicketUpdateWithWhereUniqueWithoutUserInput!]
+  deleteMany: [TicketScalarWhereInput!]
+  upsert: [TicketUpsertWithWhereUniqueWithoutUserInput!]
+}
+
+input TicketUpdateWithoutEventDataInput {
+  user: UserUpdateOneRequiredWithoutTicketsInput
+}
+
+input TicketUpdateWithoutUserDataInput {
+  event: EventUpdateOneRequiredWithoutTicketsInput
+}
+
+input TicketUpdateWithWhereUniqueWithoutEventInput {
+  where: TicketWhereUniqueInput!
+  data: TicketUpdateWithoutEventDataInput!
+}
+
+input TicketUpdateWithWhereUniqueWithoutUserInput {
+  where: TicketWhereUniqueInput!
+  data: TicketUpdateWithoutUserDataInput!
+}
+
+input TicketUpsertWithWhereUniqueWithoutEventInput {
+  where: TicketWhereUniqueInput!
+  update: TicketUpdateWithoutEventDataInput!
+  create: TicketCreateWithoutEventInput!
+}
+
+input TicketUpsertWithWhereUniqueWithoutUserInput {
+  where: TicketWhereUniqueInput!
+  update: TicketUpdateWithoutUserDataInput!
+  create: TicketCreateWithoutUserInput!
+}
+
+input TicketWhereInput {
+  """Logical AND on all given filters."""
+  AND: [TicketWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [TicketWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [TicketWhereInput!]
+  id: ID
 
   """All values that are not equal to given value."""
-  name_not: String
+  id_not: ID
 
   """All values that are contained in given list."""
-  name_in: [String!]
+  id_in: [ID!]
 
   """All values that are not contained in given list."""
-  name_not_in: [String!]
+  id_not_in: [ID!]
 
   """All values less than the given value."""
-  name_lt: String
+  id_lt: ID
 
   """All values less than or equal the given value."""
-  name_lte: String
+  id_lte: ID
 
   """All values greater than the given value."""
-  name_gt: String
+  id_gt: ID
 
   """All values greater than or equal the given value."""
-  name_gte: String
+  id_gte: ID
 
   """All values containing the given string."""
-  name_contains: String
+  id_contains: ID
 
   """All values not containing the given string."""
-  name_not_contains: String
+  id_not_contains: ID
 
   """All values starting with the given string."""
-  name_starts_with: String
+  id_starts_with: ID
 
   """All values not starting with the given string."""
-  name_not_starts_with: String
+  id_not_starts_with: ID
 
   """All values ending with the given string."""
-  name_ends_with: String
+  id_ends_with: ID
 
   """All values not ending with the given string."""
-  name_not_ends_with: String
-  email: String
+  id_not_ends_with: ID
+  event: EventWhereInput
+  user: UserWhereInput
+}
 
-  """All values that are not equal to given value."""
-  email_not: String
+input TicketWhereUniqueInput {
+  id: ID
+}
 
-  """All values that are contained in given list."""
-  email_in: [String!]
-
-  """All values that are not contained in given list."""
-  email_not_in: [String!]
-
-  """All values less than the given value."""
-  email_lt: String
-
-  """All values less than or equal the given value."""
-  email_lte: String
-
-  """All values greater than the given value."""
-  email_gt: String
-
-  """All values greater than or equal the given value."""
-  email_gte: String
-
-  """All values containing the given string."""
-  email_contains: String
-
-  """All values not containing the given string."""
-  email_not_contains: String
-
-  """All values starting with the given string."""
-  email_starts_with: String
-
-  """All values not starting with the given string."""
-  email_not_starts_with: String
-
-  """All values ending with the given string."""
-  email_ends_with: String
-
-  """All values not ending with the given string."""
-  email_not_ends_with: String
-  password: String
-
-  """All values that are not equal to given value."""
-  password_not: String
-
-  """All values that are contained in given list."""
-  password_in: [String!]
-
-  """All values that are not contained in given list."""
-  password_not_in: [String!]
-
-  """All values less than the given value."""
-  password_lt: String
-
-  """All values less than or equal the given value."""
-  password_lte: String
-
-  """All values greater than the given value."""
-  password_gt: String
-
-  """All values greater than or equal the given value."""
-  password_gte: String
-
-  """All values containing the given string."""
-  password_contains: String
-
-  """All values not containing the given string."""
-  password_not_contains: String
-
-  """All values starting with the given string."""
-  password_starts_with: String
-
-  """All values not starting with the given string."""
-  password_not_starts_with: String
-
-  """All values ending with the given string."""
-  password_ends_with: String
-
-  """All values not ending with the given string."""
-  password_not_ends_with: String
+type User implements Node {
+  id: ID!
+  name: String!
+  email: String!
+  password: String!
   token: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  status: userStatus!
+  tickets(where: TicketWhereInput, orderBy: TicketOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Ticket!]
+  favorites(where: FavoriteWhereInput, orderBy: FavoriteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Favorite!]
+}
 
-  """All values that are not equal to given value."""
-  token_not: String
+"""A connection to a list of items."""
+type UserConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
 
-  """All values that are contained in given list."""
-  token_in: [String!]
+  """A list of edges."""
+  edges: [UserEdge]!
+  aggregate: AggregateUser!
+}
 
-  """All values that are not contained in given list."""
-  token_not_in: [String!]
-
-  """All values less than the given value."""
-  token_lt: String
-
-  """All values less than or equal the given value."""
-  token_lte: String
-
-  """All values greater than the given value."""
-  token_gt: String
-
-  """All values greater than or equal the given value."""
-  token_gte: String
-
-  """All values containing the given string."""
-  token_contains: String
-
-  """All values not containing the given string."""
-  token_not_contains: String
-
-  """All values starting with the given string."""
-  token_starts_with: String
-
-  """All values not starting with the given string."""
-  token_not_starts_with: String
-
-  """All values ending with the given string."""
-  token_ends_with: String
-
-  """All values not ending with the given string."""
-  token_not_ends_with: String
-  createdAt: DateTime
-
-  """All values that are not equal to given value."""
-  createdAt_not: DateTime
-
-  """All values that are contained in given list."""
-  createdAt_in: [DateTime!]
-
-  """All values that are not contained in given list."""
-  createdAt_not_in: [DateTime!]
-
-  """All values less than the given value."""
-  createdAt_lt: DateTime
-
-  """All values less than or equal the given value."""
-  createdAt_lte: DateTime
-
-  """All values greater than the given value."""
-  createdAt_gt: DateTime
-
-  """All values greater than or equal the given value."""
-  createdAt_gte: DateTime
-  updatedAt: DateTime
-
-  """All values that are not equal to given value."""
-  updatedAt_not: DateTime
-
-  """All values that are contained in given list."""
-  updatedAt_in: [DateTime!]
-
-  """All values that are not contained in given list."""
-  updatedAt_not_in: [DateTime!]
-
-  """All values less than the given value."""
-  updatedAt_lt: DateTime
-
-  """All values less than or equal the given value."""
-  updatedAt_lte: DateTime
-
-  """All values greater than the given value."""
-  updatedAt_gt: DateTime
-
-  """All values greater than or equal the given value."""
-  updatedAt_gte: DateTime
+input UserCreateInput {
+  id: ID
+  name: String!
+  email: String!
+  password: String!
+  token: String
   status: userStatus
+  tickets: TicketCreateManyWithoutUserInput
+  favorites: FavoriteCreateManyWithoutUserInput
+}
 
-  """All values that are not equal to given value."""
-  status_not: userStatus
+input UserCreateOneWithoutFavoritesInput {
+  create: UserCreateWithoutFavoritesInput
+  connect: UserWhereUniqueInput
+}
 
-  """All values that are contained in given list."""
-  status_in: [userStatus!]
+input UserCreateOneWithoutTicketsInput {
+  create: UserCreateWithoutTicketsInput
+  connect: UserWhereUniqueInput
+}
 
-  """All values that are not contained in given list."""
-  status_not_in: [userStatus!]
+input UserCreateWithoutFavoritesInput {
+  id: ID
+  name: String!
+  email: String!
+  password: String!
+  token: String
+  status: userStatus
+  tickets: TicketCreateManyWithoutUserInput
+}
+
+input UserCreateWithoutTicketsInput {
+  id: ID
+  name: String!
+  email: String!
+  password: String!
+  token: String
+  status: userStatus
+  favorites: FavoriteCreateManyWithoutUserInput
+}
+
+"""An edge in a connection."""
+type UserEdge {
+  """The item at the end of the edge."""
+  node: User!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum UserOrderByInput {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+  email_ASC
+  email_DESC
+  password_ASC
+  password_DESC
+  token_ASC
+  token_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  status_ASC
+  status_DESC
+}
+
+type UserPreviousValues {
+  id: ID!
+  name: String!
+  email: String!
+  password: String!
+  token: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  status: userStatus!
 }
 
 enum userStatus {
@@ -1787,16 +2298,8 @@ input UserUpdateInput {
   password: String
   token: String
   status: userStatus
-  events: EventUpdateManyWithoutUsersInput
+  tickets: TicketUpdateManyWithoutUserInput
   favorites: FavoriteUpdateManyWithoutUserInput
-}
-
-input UserUpdateManyDataInput {
-  name: String
-  email: String
-  password: String
-  token: String
-  status: userStatus
 }
 
 input UserUpdateManyMutationInput {
@@ -1807,23 +2310,6 @@ input UserUpdateManyMutationInput {
   status: userStatus
 }
 
-input UserUpdateManyWithoutEventsInput {
-  create: [UserCreateWithoutEventsInput!]
-  connect: [UserWhereUniqueInput!]
-  set: [UserWhereUniqueInput!]
-  disconnect: [UserWhereUniqueInput!]
-  delete: [UserWhereUniqueInput!]
-  update: [UserUpdateWithWhereUniqueWithoutEventsInput!]
-  updateMany: [UserUpdateManyWithWhereNestedInput!]
-  deleteMany: [UserScalarWhereInput!]
-  upsert: [UserUpsertWithWhereUniqueWithoutEventsInput!]
-}
-
-input UserUpdateManyWithWhereNestedInput {
-  where: UserScalarWhereInput!
-  data: UserUpdateManyDataInput!
-}
-
 input UserUpdateOneRequiredWithoutFavoritesInput {
   create: UserCreateWithoutFavoritesInput
   connect: UserWhereUniqueInput
@@ -1831,13 +2317,11 @@ input UserUpdateOneRequiredWithoutFavoritesInput {
   upsert: UserUpsertWithoutFavoritesInput
 }
 
-input UserUpdateWithoutEventsDataInput {
-  name: String
-  email: String
-  password: String
-  token: String
-  status: userStatus
-  favorites: FavoriteUpdateManyWithoutUserInput
+input UserUpdateOneRequiredWithoutTicketsInput {
+  create: UserCreateWithoutTicketsInput
+  connect: UserWhereUniqueInput
+  update: UserUpdateWithoutTicketsDataInput
+  upsert: UserUpsertWithoutTicketsInput
 }
 
 input UserUpdateWithoutFavoritesDataInput {
@@ -1846,12 +2330,16 @@ input UserUpdateWithoutFavoritesDataInput {
   password: String
   token: String
   status: userStatus
-  events: EventUpdateManyWithoutUsersInput
+  tickets: TicketUpdateManyWithoutUserInput
 }
 
-input UserUpdateWithWhereUniqueWithoutEventsInput {
-  where: UserWhereUniqueInput!
-  data: UserUpdateWithoutEventsDataInput!
+input UserUpdateWithoutTicketsDataInput {
+  name: String
+  email: String
+  password: String
+  token: String
+  status: userStatus
+  favorites: FavoriteUpdateManyWithoutUserInput
 }
 
 input UserUpsertWithoutFavoritesInput {
@@ -1859,10 +2347,9 @@ input UserUpsertWithoutFavoritesInput {
   create: UserCreateWithoutFavoritesInput!
 }
 
-input UserUpsertWithWhereUniqueWithoutEventsInput {
-  where: UserWhereUniqueInput!
-  update: UserUpdateWithoutEventsDataInput!
-  create: UserCreateWithoutEventsInput!
+input UserUpsertWithoutTicketsInput {
+  update: UserUpdateWithoutTicketsDataInput!
+  create: UserCreateWithoutTicketsInput!
 }
 
 input UserWhereInput {
@@ -2128,9 +2615,9 @@ input UserWhereInput {
 
   """All values that are not contained in given list."""
   status_not_in: [userStatus!]
-  events_every: EventWhereInput
-  events_some: EventWhereInput
-  events_none: EventWhereInput
+  tickets_every: TicketWhereInput
+  tickets_some: TicketWhereInput
+  tickets_none: TicketWhereInput
   favorites_every: FavoriteWhereInput
   favorites_some: FavoriteWhereInput
   favorites_none: FavoriteWhereInput

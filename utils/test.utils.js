@@ -45,23 +45,27 @@ export const favoriteOne = {
 
 export const seedDatebase = async () => {
   await prisma.mutation.deleteManyUsers();
-  await prisma.mutation.deleteManyEvents();
-  await prisma.mutation.deleteManyFavorites();
-  await prisma.mutation.deleteManyCategories();
+  await prisma.mutation.deleteManyAdmins();
+  // await prisma.mutation.deleteManyEvents();
+  // await prisma.mutation.deleteManyFavorites();
+  // await prisma.mutation.deleteManyCategories();
 
   userOne.user = await prisma.mutation.createUser({
     data: userOne.input,
   });
 
-  const token = generateToken(userOne.user.id);
-
   userOne.user = await prisma.mutation.updateUser({
-    data: { token },
+    data: { token: await generateToken(userOne.user.id) },
     where: { id: userOne.user.id },
   });
 
-  userTwo.user = await prisma.mutation.createUser({
+  userTwo.user = await prisma.mutation.createAdmin({
     data: userTwo.input,
+  });
+
+  userTwo.user = await prisma.mutation.updateAdmin({
+    data: { token: await generateToken(userTwo.user.id) },
+    where: { id: userTwo.user.id },
   });
 
   // userTwo.user = await prisma.mutation.updateUser({
@@ -69,38 +73,38 @@ export const seedDatebase = async () => {
   //   where: { id: userTwo.user.id },
   // });
 
-  categoryOne.category = await prisma.mutation.createCategory({
-    data: categoryOne.input,
-  });
+  // categoryOne.category = await prisma.mutation.createCategory({
+  //   data: categoryOne.input,
+  // });
 
-  eventOne.event = await prisma.mutation.createEvent({
-    data: {
-      ...eventOne.input,
-      category: {
-        connect: {
-          id: categoryOne.category.id,
-        },
-      },
-      users: {
-        connect: {
-          id: userOne.user.id,
-        },
-      },
-    },
-  });
+  // eventOne.event = await prisma.mutation.createEvent({
+  //   data: {
+  //     ...eventOne.input,
+  //     category: {
+  //       connect: {
+  //         id: categoryOne.category.id,
+  //       },
+  //     },
+  //     users: {
+  //       connect: {
+  //         id: userOne.user.id,
+  //       },
+  //     },
+  //   },
+  // });
 
-  favoriteOne.favorite = await prisma.mutation.createFavorite({
-    data: {
-      event: {
-        connect: {
-          id: eventOne.event.id,
-        },
-      },
-      user: {
-        connect: {
-          id: userOne.user.id,
-        },
-      },
-    },
-  });
+  // favoriteOne.favorite = await prisma.mutation.createFavorite({
+  //   data: {
+  //     event: {
+  //       connect: {
+  //         id: eventOne.event.id,
+  //       },
+  //     },
+  //     user: {
+  //       connect: {
+  //         id: userOne.user.id,
+  //       },
+  //     },
+  //   },
+  // });
 };

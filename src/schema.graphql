@@ -4,19 +4,44 @@
 # import EventOrderByInput from "./generated/prisma.graphql"
 
 type Query {
-  users(query: String, first: Int, skip: Int, orderBy: UserOrderByInput): [User!]!
-  
+  users(
+    query: String
+    first: Int
+    skip: Int
+    orderBy: UserOrderByInput
+  ): [User!]!
+
   me: User!
 
-  categories(query: String, first: Int, skip: Int, orderBy: CategoryOrderByInput): [Category!]!
+  categories(
+    query: String
+    first: Int
+    skip: Int
+    orderBy: CategoryOrderByInput
+  ): [Category!]!
 
-  favorites(query: String, first: Int, skip: Int, orderBy: FavoriteOrderByInput): [Favorite!]!
+  favorites(
+    query: String
+    first: Int
+    skip: Int
+    orderBy: FavoriteOrderByInput
+  ): [Favorite!]!
 
   event(id: ID!): Event!
 
-  events(query: String, first: Int, skip: Int, orderBy: UserOrderByInput): [Event!]!
+  events(
+    query: String
+    first: Int
+    skip: Int
+    orderBy: UserOrderByInput
+  ): [Event!]!
 
-  relatedEvents(query: String, first: Int, skip: Int, orderBy: EventOrderByInput): [Event!]!
+  relatedEvents(
+    query: String
+    first: Int
+    skip: Int
+    orderBy: EventOrderByInput
+  ): [Event!]!
 }
 
 type Mutation {
@@ -25,6 +50,12 @@ type Mutation {
   createUser(data: CreateUserInput!): User!
   updateUser(data: UpdateUserInput!): User!
   deleteUser: User!
+
+  logginAdmin(data: LogginUserInput): User!
+
+  createAdmin(data: CreateUserInput!): User!
+  updateAdmin(data: UpdateUserInput!): User!
+  deleteAdmin: User!
 
   createEvent(data: CreateEventInput!): Event!
   updateEvent(data: UpdateEventInput!): Event!
@@ -60,6 +91,18 @@ type User {
   status: userStatus!
 }
 
+type Admin {
+  id: ID!
+  name: String!
+  email: String!
+  password: String!
+  token: String
+  createdAt: String!
+  updatedAt: String!
+  status: userStatus!
+  events: [Event!]!
+}
+
 type Event {
   id: ID!
   img: String!
@@ -68,8 +111,10 @@ type Event {
   dateStart: String!
   dateEnd: String!
   status: eventStatus!
-  category: Category!
   eventType: eventType!
+  category: Category!
+  tickets: [Ticket!]!
+  admin: Admin!
 }
 
 type Category {
@@ -79,6 +124,12 @@ type Category {
 }
 
 type Favorite {
+  id: ID!
+  event: Event!
+  user: User!
+}
+
+type Ticket {
   id: ID!
   event: Event!
   user: User!

@@ -7,8 +7,20 @@ type User {
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
   status: userStatus! @default(value: INATIVO)
-  events: [Event!]! @relation(name: "UserToEvent", onDelete: SET_NULL)
+  tickets: [Ticket!]! @relation(name: "TicketToUser", onDelete: CASCADE)
   favorites: [Favorite!]! @relation(name: "UserToFavorite", onDelete: CASCADE)
+}
+
+type Admin {
+  id: ID! @id
+  name: String!
+  email: String! @unique
+  password: String!
+  token: String
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+  status: userStatus! @default(value: INATIVO)
+  events: [Event!]! @relation(name: "AdminToEvent", onDelete: CASCADE)
 }
 
 type Event {
@@ -21,7 +33,8 @@ type Event {
   status: eventStatus! @default(value: EM_BREVE)
   eventType: eventType! @default(value: ONLINE)
   category: Category! @relation(name: "CategoryToEvent", onDelete: SET_NULL)
-  users: [User!]! @relation(name: "UserToEvent", onDelete: SET_NULL)
+  tickets: [Ticket!]! @relation(name: "TicketToEvent", onDelete: CASCADE)
+  admin: Admin! @relation(name: "AdminToEvent", onDelete: SET_NULL)
 }
 
 
@@ -35,6 +48,12 @@ type Favorite {
   id: ID! @id
   event: Event! @relation(name: "FavoriteToEvent", onDelete: SET_NULL)
   user: User! @relation(name: "UserToFavorite", onDelete: SET_NULL)
+}
+
+type Ticket {
+  id: ID! @id
+  event: Event! @relation(name: "TicketToEvent", onDelete: SET_NULL)
+  user: User! @relation(name: "TicketToUser", onDelete: SET_NULL)
 }
 
 enum userStatus {

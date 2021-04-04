@@ -15,7 +15,15 @@ export const Mutation = {
       throw new Error("Email ou Senha Inválido");
     }
 
-    return user;
+    const result = await prisma.mutation.updateUser(
+      {
+        data: { token: generateToken(user.id) },
+        where: { id: user.id },
+      },
+      info
+    );
+
+    return result;
   },
 
   async createUser(parent, { data }, { prisma }, info) {
@@ -91,7 +99,7 @@ export const Mutation = {
   async createEvent(parent, { data }, { prisma, request }, info) {
     const userId = getUserId(request);
 
-    const userExists = await prisma.exists.User({ id: userId });
+    const userExists = await prisma.exists.Admin({ id: userId });
 
     if (!userExists) {
       throw new Error("Usuário inválido");
