@@ -66,7 +66,7 @@ type Mutation {
 
   createCategory(data: CreateCategoryInput!): Category!
   updateCategory(data: UpdateCategoryInput!): Category!
-  deleteCategory(id: ID!): Category!
+  deleteCategory(data: DeleteCategoryInput!): Category!
 }
 
 type Subscription {
@@ -202,6 +202,10 @@ input CreateCategoryInput {
 input UpdateCategoryInput {
   id: ID!
   name: String
+}
+
+input DeleteCategoryInput {
+  id: ID!
 }
 
 input CreateFavoriteInput {

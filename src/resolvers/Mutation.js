@@ -96,6 +96,100 @@ export const Mutation = {
     return deletedUser;
   },
 
+  async logginAdmin(parent, { data }, { prisma }, info) {
+    const user = await prisma.query.admin({ where: { email: data.email } });
+
+    if (!user) {
+      throw new Error("Email ou Senha Inválido");
+    }
+
+    const passwordMatch = await bcrypt.compare(data.password, user.password);
+
+    if (!passwordMatch) {
+      throw new Error("Email ou Senha Inválido");
+    }
+
+    const result = await prisma.mutation.updateAdmin(
+      {
+        data: { token: generateToken(user.id) },
+        where: { id: user.id },
+      },
+      info
+    );
+
+    return result;
+  },
+
+  async createAdmin(parent, { data }, { prisma }, info) {
+    const emailTaken = await prisma.exists.Admin({ email: data.email });
+
+    if (emailTaken) {
+      throw new Error("Email em uso");
+    }
+
+    const passwordHash = await hashPassword(data.password);
+
+    const user = await prisma.mutation.createAdmin({
+      data: {
+        ...data,
+        password: passwordHash,
+      },
+    });
+
+    const result = await prisma.mutation.updateAdmin(
+      {
+        data: { token: generateToken(user.id) },
+        where: { id: user.id },
+      },
+      info
+    );
+
+    return result;
+  },
+
+  async updateAdmin(parent, { data }, { prisma, request }, info) {
+    const userId = getUserId(request);
+
+    const userExists = await prisma.exists.Admin({ id: userId });
+
+    if (!userExists) {
+      throw new Error("Usuário inválido");
+    }
+
+    if (typeof data.password === "string") {
+      data.password = await hashPassword(data.password);
+    }
+
+    const user = await prisma.mutation.updateAdmin(
+      {
+        data,
+        where: {
+          id: userId,
+        },
+      },
+      info
+    );
+
+    return user;
+  },
+
+  async deleteAdmin(parent, args, { prisma, request }, info) {
+    const userId = getUserId(request);
+
+    const userExists = await prisma.exists.Admin({ id: userId });
+
+    if (!userExists) {
+      throw new Error("Usuário inválido");
+    }
+
+    const deletedUser = await prisma.mutation.deleteAdmin(
+      { where: { id: userId } },
+      info
+    );
+
+    return deletedUser;
+  },
+
   async createEvent(parent, { data }, { prisma, request }, info) {
     const userId = getUserId(request);
 
@@ -236,7 +330,7 @@ export const Mutation = {
   async createCategory(parent, { data }, { prisma, request }, info) {
     const userId = getUserId(request);
 
-    const userExists = await prisma.exists.User({ id: userId });
+    const userExists = await prisma.exists.Admin({ id: userId });
 
     if (!userExists) {
       throw new Error("Usuário inválido");
@@ -253,31 +347,31 @@ export const Mutation = {
   async updateCategory(parent, { data }, { prisma, request }, info) {
     const userId = getUserId(request);
 
-    const userExists = await prisma.exists.User({ id: userId });
+    const userExists = await prisma.exists.Admin({ id: userId });
 
     if (!userExists) {
       throw new Error("Usuário inválido");
     }
 
     const category = await prisma.mutation.updateCategory(
-      { data: { ...data }, where: { id: data.id } },
+      { data: { name: data.name }, where: { id: data.id } },
       info
     );
 
     return category;
   },
 
-  async deleteCategory(parent, { id }, { prisma, request }, info) {
+  async deleteCategory(parent, { data }, { prisma, request }, info) {
     const userId = getUserId(request);
 
-    const userExists = await prisma.exists.User({ id: userId });
+    const userExists = await prisma.exists.Admin({ id: userId });
 
     if (!userExists) {
       throw new Error("Usuário inválido");
     }
 
     const category = await prisma.mutation.deleteCategory(
-      { where: { id } },
+      { where: { id: data.id } },
       info
     );
 

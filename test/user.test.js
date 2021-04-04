@@ -12,18 +12,18 @@ beforeEach(seedDatebase);
 
 const client = getClient();
 
-// test("Deve fazer login e retornar um usuário válido", async () => {
-//   const variables = {
-//     data: {
-//       email: "joseph@gmail.com",
-//       password: "joseph111",
-//     },
-//   };
+test("Deve fazer login e retornar um usuário válido", async () => {
+  const variables = {
+    data: {
+      email: "joseph@gmail.com",
+      password: "joseph111",
+    },
+  };
 
-//   const { data } = await client.mutate({ mutation: logginUser, variables });
+  const { data } = await client.mutate({ mutation: logginUser, variables });
 
-//   expect(data.logginUser.email).toBe("joseph@gmail.com");
-// });
+  expect(data.logginUser.email).toBe("joseph@gmail.com");
+});
 
 test("Deve criar um novo usuário e retornar o mesmo", async () => {
   const variables = {
@@ -39,26 +39,26 @@ test("Deve criar um novo usuário e retornar o mesmo", async () => {
   expect(data.createUser.email).toBe("cronos@gmail.com");
 });
 
-// test("Deve fazer update de um usuário", async () => {
-//   const client = getClient(userOne.user.token);
+test("Deve fazer update de um usuário", async () => {
+  const client = getClient(userOne.user.token);
 
-//   const variables = {
-//     data: {
-//       email: "cronos@gmail.com",
-//       password: "daredevil",
-//       name: "José",
-//     },
-//   };
+  const variables = {
+    data: {
+      email: "cronos@gmail.com",
+      password: "daredevil",
+      name: "José",
+    },
+  };
 
-//   const { data } = await client.mutate({ mutation: updateUser, variables });
+  const { data } = await client.mutate({ mutation: updateUser, variables });
 
-//   expect(data.updateUser.email).toBe("cronos@gmail.com");
-// });
+  expect(data.updateUser.email).toBe("cronos@gmail.com");
+});
 
-// test("Deve deletar um usuário", async () => {
-//   const client = getClient(userOne.user.token);
+test("Deve deletar um usuário", async () => {
+  const client = getClient(userOne.user.token);
 
-//   const { data } = await client.mutate({ mutation: deleteUser });
+  const { data } = await client.mutate({ mutation: deleteUser });
 
-//   expect(data.deleteUser.name).toBe("Joseph");
-// });
+  expect(data.deleteUser.name).toBe("Joseph");
+});
