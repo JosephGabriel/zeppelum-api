@@ -35,8 +35,8 @@ type Event {
   category: Category! @relation(name: "CategoryToEvent", onDelete: SET_NULL)
   tickets: [Ticket!]! @relation(name: "TicketToEvent", onDelete: CASCADE)
   admin: Admin! @relation(name: "AdminToEvent", onDelete: SET_NULL)
+  favorites: [Favorite!]! @relation(name: "FavoriteToEvent", onDelete: CASCADE)
 }
-
 
 type Category {
   id: ID! @id

@@ -59,7 +59,7 @@ export const seedDatebase = async () => {
   await prisma.mutation.deleteManyAdmins();
   await prisma.mutation.deleteManyCategories();
   await prisma.mutation.deleteManyEvents();
-  // await prisma.mutation.deleteManyFavorites();
+  await prisma.mutation.deleteManyFavorites();
 
   userOne.user = await prisma.mutation.createUser({
     data: userOne.input,
@@ -99,18 +99,10 @@ export const seedDatebase = async () => {
     },
   });
 
-  // favoriteOne.favorite = await prisma.mutation.createFavorite({
-  //   data: {
-  //     event: {
-  //       connect: {
-  //         id: eventOne.event.id,
-  //       },
-  //     },
-  //     user: {
-  //       connect: {
-  //         id: userOne.user.id,
-  //       },
-  //     },
-  //   },
-  // });
+  favoriteOne.favorite = await prisma.mutation.createFavorite({
+    data: {
+      event: { connect: { id: eventOne.event.id } },
+      user: { connect: { id: userOne.user.id } },
+    },
+  });
 };

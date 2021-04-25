@@ -213,7 +213,6 @@ input DeleteCategoryInput {
 
 input CreateFavoriteInput {
   event: ID!
-  user: ID!
 }
 
 enum userStatus {

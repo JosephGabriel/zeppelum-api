@@ -1,5 +1,5 @@
 # source: http://localhost:4466
-# timestamp: Sat Apr 03 2021 16:28:32 GMT-0300 (Horário Padrão de Brasília)
+# timestamp: Sun Apr 25 2021 14:32:07 GMT-0300 (Horário Padrão de Brasília)
 
 type Admin implements Node {
   id: ID!
@@ -693,6 +693,7 @@ type Event implements Node {
   category: Category!
   tickets(where: TicketWhereInput, orderBy: TicketOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Ticket!]
   admin: Admin!
+  favorites(where: FavoriteWhereInput, orderBy: FavoriteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Favorite!]
 }
 
 """A connection to a list of items."""
@@ -717,6 +718,7 @@ input EventCreateInput {
   category: CategoryCreateOneWithoutEventsInput!
   tickets: TicketCreateManyWithoutEventInput
   admin: AdminCreateOneWithoutEventsInput!
+  favorites: FavoriteCreateManyWithoutEventInput
 }
 
 input EventCreateManyWithoutAdminInput {
@@ -729,8 +731,8 @@ input EventCreateManyWithoutCategoryInput {
   connect: [EventWhereUniqueInput!]
 }
 
-input EventCreateOneInput {
-  create: EventCreateInput
+input EventCreateOneWithoutFavoritesInput {
+  create: EventCreateWithoutFavoritesInput
   connect: EventWhereUniqueInput
 }
 
@@ -750,6 +752,7 @@ input EventCreateWithoutAdminInput {
   eventType: eventType
   category: CategoryCreateOneWithoutEventsInput!
   tickets: TicketCreateManyWithoutEventInput
+  favorites: FavoriteCreateManyWithoutEventInput
 }
 
 input EventCreateWithoutCategoryInput {
@@ -761,6 +764,21 @@ input EventCreateWithoutCategoryInput {
   dateEnd: String!
   status: eventStatus
   eventType: eventType
+  tickets: TicketCreateManyWithoutEventInput
+  admin: AdminCreateOneWithoutEventsInput!
+  favorites: FavoriteCreateManyWithoutEventInput
+}
+
+input EventCreateWithoutFavoritesInput {
+  id: ID
+  img: String!
+  title: String!
+  price: Float!
+  dateStart: String!
+  dateEnd: String!
+  status: eventStatus
+  eventType: eventType
+  category: CategoryCreateOneWithoutEventsInput!
   tickets: TicketCreateManyWithoutEventInput
   admin: AdminCreateOneWithoutEventsInput!
 }
@@ -776,6 +794,7 @@ input EventCreateWithoutTicketsInput {
   eventType: eventType
   category: CategoryCreateOneWithoutEventsInput!
   admin: AdminCreateOneWithoutEventsInput!
+  favorites: FavoriteCreateManyWithoutEventInput
 }
 
 """An edge in a connection."""
@@ -1120,19 +1139,6 @@ enum eventType {
   PRESENCIAL
 }
 
-input EventUpdateDataInput {
-  img: String
-  title: String
-  price: Float
-  dateStart: String
-  dateEnd: String
-  status: eventStatus
-  eventType: eventType
-  category: CategoryUpdateOneRequiredWithoutEventsInput
-  tickets: TicketUpdateManyWithoutEventInput
-  admin: AdminUpdateOneRequiredWithoutEventsInput
-}
-
 input EventUpdateInput {
   img: String
   title: String
@@ -1144,6 +1150,7 @@ input EventUpdateInput {
   category: CategoryUpdateOneRequiredWithoutEventsInput
   tickets: TicketUpdateManyWithoutEventInput
   admin: AdminUpdateOneRequiredWithoutEventsInput
+  favorites: FavoriteUpdateManyWithoutEventInput
 }
 
 input EventUpdateManyDataInput {
@@ -1195,11 +1202,11 @@ input EventUpdateManyWithWhereNestedInput {
   data: EventUpdateManyDataInput!
 }
 
-input EventUpdateOneRequiredInput {
-  create: EventCreateInput
+input EventUpdateOneRequiredWithoutFavoritesInput {
+  create: EventCreateWithoutFavoritesInput
   connect: EventWhereUniqueInput
-  update: EventUpdateDataInput
-  upsert: EventUpsertNestedInput
+  update: EventUpdateWithoutFavoritesDataInput
+  upsert: EventUpsertWithoutFavoritesInput
 }
 
 input EventUpdateOneRequiredWithoutTicketsInput {
@@ -1219,6 +1226,7 @@ input EventUpdateWithoutAdminDataInput {
   eventType: eventType
   category: CategoryUpdateOneRequiredWithoutEventsInput
   tickets: TicketUpdateManyWithoutEventInput
+  favorites: FavoriteUpdateManyWithoutEventInput
 }
 
 input EventUpdateWithoutCategoryDataInput {
@@ -1229,6 +1237,20 @@ input EventUpdateWithoutCategoryDataInput {
   dateEnd: String
   status: eventStatus
   eventType: eventType
+  tickets: TicketUpdateManyWithoutEventInput
+  admin: AdminUpdateOneRequiredWithoutEventsInput
+  favorites: FavoriteUpdateManyWithoutEventInput
+}
+
+input EventUpdateWithoutFavoritesDataInput {
+  img: String
+  title: String
+  price: Float
+  dateStart: String
+  dateEnd: String
+  status: eventStatus
+  eventType: eventType
+  category: CategoryUpdateOneRequiredWithoutEventsInput
   tickets: TicketUpdateManyWithoutEventInput
   admin: AdminUpdateOneRequiredWithoutEventsInput
 }
@@ -1243,6 +1265,7 @@ input EventUpdateWithoutTicketsDataInput {
   eventType: eventType
   category: CategoryUpdateOneRequiredWithoutEventsInput
   admin: AdminUpdateOneRequiredWithoutEventsInput
+  favorites: FavoriteUpdateManyWithoutEventInput
 }
 
 input EventUpdateWithWhereUniqueWithoutAdminInput {
@@ -1255,9 +1278,9 @@ input EventUpdateWithWhereUniqueWithoutCategoryInput {
   data: EventUpdateWithoutCategoryDataInput!
 }
 
-input EventUpsertNestedInput {
-  update: EventUpdateDataInput!
-  create: EventCreateInput!
+input EventUpsertWithoutFavoritesInput {
+  update: EventUpdateWithoutFavoritesDataInput!
+  create: EventCreateWithoutFavoritesInput!
 }
 
 input EventUpsertWithoutTicketsInput {
@@ -1533,6 +1556,9 @@ input EventWhereInput {
   tickets_some: TicketWhereInput
   tickets_none: TicketWhereInput
   admin: AdminWhereInput
+  favorites_every: FavoriteWhereInput
+  favorites_some: FavoriteWhereInput
+  favorites_none: FavoriteWhereInput
 }
 
 input EventWhereUniqueInput {
@@ -1557,8 +1583,13 @@ type FavoriteConnection {
 
 input FavoriteCreateInput {
   id: ID
-  event: EventCreateOneInput!
+  event: EventCreateOneWithoutFavoritesInput!
   user: UserCreateOneWithoutFavoritesInput!
+}
+
+input FavoriteCreateManyWithoutEventInput {
+  create: [FavoriteCreateWithoutEventInput!]
+  connect: [FavoriteWhereUniqueInput!]
 }
 
 input FavoriteCreateManyWithoutUserInput {
@@ -1566,9 +1597,14 @@ input FavoriteCreateManyWithoutUserInput {
   connect: [FavoriteWhereUniqueInput!]
 }
 
+input FavoriteCreateWithoutEventInput {
+  id: ID
+  user: UserCreateOneWithoutFavoritesInput!
+}
+
 input FavoriteCreateWithoutUserInput {
   id: ID
-  event: EventCreateOneInput!
+  event: EventCreateOneWithoutFavoritesInput!
 }
 
 """An edge in a connection."""
@@ -1680,8 +1716,19 @@ input FavoriteSubscriptionWhereInput {
 }
 
 input FavoriteUpdateInput {
-  event: EventUpdateOneRequiredInput
+  event: EventUpdateOneRequiredWithoutFavoritesInput
   user: UserUpdateOneRequiredWithoutFavoritesInput
+}
+
+input FavoriteUpdateManyWithoutEventInput {
+  create: [FavoriteCreateWithoutEventInput!]
+  connect: [FavoriteWhereUniqueInput!]
+  set: [FavoriteWhereUniqueInput!]
+  disconnect: [FavoriteWhereUniqueInput!]
+  delete: [FavoriteWhereUniqueInput!]
+  update: [FavoriteUpdateWithWhereUniqueWithoutEventInput!]
+  deleteMany: [FavoriteScalarWhereInput!]
+  upsert: [FavoriteUpsertWithWhereUniqueWithoutEventInput!]
 }
 
 input FavoriteUpdateManyWithoutUserInput {
@@ -1695,13 +1742,28 @@ input FavoriteUpdateManyWithoutUserInput {
   upsert: [FavoriteUpsertWithWhereUniqueWithoutUserInput!]
 }
 
+input FavoriteUpdateWithoutEventDataInput {
+  user: UserUpdateOneRequiredWithoutFavoritesInput
+}
+
 input FavoriteUpdateWithoutUserDataInput {
-  event: EventUpdateOneRequiredInput
+  event: EventUpdateOneRequiredWithoutFavoritesInput
+}
+
+input FavoriteUpdateWithWhereUniqueWithoutEventInput {
+  where: FavoriteWhereUniqueInput!
+  data: FavoriteUpdateWithoutEventDataInput!
 }
 
 input FavoriteUpdateWithWhereUniqueWithoutUserInput {
   where: FavoriteWhereUniqueInput!
   data: FavoriteUpdateWithoutUserDataInput!
+}
+
+input FavoriteUpsertWithWhereUniqueWithoutEventInput {
+  where: FavoriteWhereUniqueInput!
+  update: FavoriteUpdateWithoutEventDataInput!
+  create: FavoriteCreateWithoutEventInput!
 }
 
 input FavoriteUpsertWithWhereUniqueWithoutUserInput {
@@ -1779,38 +1841,38 @@ scalar Long
 type Mutation {
   createUser(data: UserCreateInput!): User!
   createAdmin(data: AdminCreateInput!): Admin!
+  createEvent(data: EventCreateInput!): Event!
   createCategory(data: CategoryCreateInput!): Category!
   createFavorite(data: FavoriteCreateInput!): Favorite!
   createTicket(data: TicketCreateInput!): Ticket!
-  createEvent(data: EventCreateInput!): Event!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   updateAdmin(data: AdminUpdateInput!, where: AdminWhereUniqueInput!): Admin
+  updateEvent(data: EventUpdateInput!, where: EventWhereUniqueInput!): Event
   updateCategory(data: CategoryUpdateInput!, where: CategoryWhereUniqueInput!): Category
   updateFavorite(data: FavoriteUpdateInput!, where: FavoriteWhereUniqueInput!): Favorite
   updateTicket(data: TicketUpdateInput!, where: TicketWhereUniqueInput!): Ticket
-  updateEvent(data: EventUpdateInput!, where: EventWhereUniqueInput!): Event
   deleteUser(where: UserWhereUniqueInput!): User
   deleteAdmin(where: AdminWhereUniqueInput!): Admin
+  deleteEvent(where: EventWhereUniqueInput!): Event
   deleteCategory(where: CategoryWhereUniqueInput!): Category
   deleteFavorite(where: FavoriteWhereUniqueInput!): Favorite
   deleteTicket(where: TicketWhereUniqueInput!): Ticket
-  deleteEvent(where: EventWhereUniqueInput!): Event
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
   upsertAdmin(where: AdminWhereUniqueInput!, create: AdminCreateInput!, update: AdminUpdateInput!): Admin!
+  upsertEvent(where: EventWhereUniqueInput!, create: EventCreateInput!, update: EventUpdateInput!): Event!
   upsertCategory(where: CategoryWhereUniqueInput!, create: CategoryCreateInput!, update: CategoryUpdateInput!): Category!
   upsertFavorite(where: FavoriteWhereUniqueInput!, create: FavoriteCreateInput!, update: FavoriteUpdateInput!): Favorite!
   upsertTicket(where: TicketWhereUniqueInput!, create: TicketCreateInput!, update: TicketUpdateInput!): Ticket!
-  upsertEvent(where: EventWhereUniqueInput!, create: EventCreateInput!, update: EventUpdateInput!): Event!
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
   updateManyAdmins(data: AdminUpdateManyMutationInput!, where: AdminWhereInput): BatchPayload!
-  updateManyCategories(data: CategoryUpdateManyMutationInput!, where: CategoryWhereInput): BatchPayload!
   updateManyEvents(data: EventUpdateManyMutationInput!, where: EventWhereInput): BatchPayload!
+  updateManyCategories(data: CategoryUpdateManyMutationInput!, where: CategoryWhereInput): BatchPayload!
   deleteManyUsers(where: UserWhereInput): BatchPayload!
   deleteManyAdmins(where: AdminWhereInput): BatchPayload!
+  deleteManyEvents(where: EventWhereInput): BatchPayload!
   deleteManyCategories(where: CategoryWhereInput): BatchPayload!
   deleteManyFavorites(where: FavoriteWhereInput): BatchPayload!
   deleteManyTickets(where: TicketWhereInput): BatchPayload!
-  deleteManyEvents(where: EventWhereInput): BatchPayload!
   executeRaw(database: PrismaDatabase, query: String!): Json!
 }
 
@@ -1848,22 +1910,22 @@ enum PrismaDatabase {
 type Query {
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   admins(where: AdminWhereInput, orderBy: AdminOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Admin]!
+  events(where: EventWhereInput, orderBy: EventOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Event]!
   categories(where: CategoryWhereInput, orderBy: CategoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Category]!
   favorites(where: FavoriteWhereInput, orderBy: FavoriteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Favorite]!
   tickets(where: TicketWhereInput, orderBy: TicketOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Ticket]!
-  events(where: EventWhereInput, orderBy: EventOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Event]!
   user(where: UserWhereUniqueInput!): User
   admin(where: AdminWhereUniqueInput!): Admin
+  event(where: EventWhereUniqueInput!): Event
   category(where: CategoryWhereUniqueInput!): Category
   favorite(where: FavoriteWhereUniqueInput!): Favorite
   ticket(where: TicketWhereUniqueInput!): Ticket
-  event(where: EventWhereUniqueInput!): Event
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
   adminsConnection(where: AdminWhereInput, orderBy: AdminOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): AdminConnection!
+  eventsConnection(where: EventWhereInput, orderBy: EventOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): EventConnection!
   categoriesConnection(where: CategoryWhereInput, orderBy: CategoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CategoryConnection!
   favoritesConnection(where: FavoriteWhereInput, orderBy: FavoriteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): FavoriteConnection!
   ticketsConnection(where: TicketWhereInput, orderBy: TicketOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): TicketConnection!
-  eventsConnection(where: EventWhereInput, orderBy: EventOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): EventConnection!
 
   """Fetches an object given its ID"""
   node(
@@ -1875,10 +1937,10 @@ type Query {
 type Subscription {
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
   admin(where: AdminSubscriptionWhereInput): AdminSubscriptionPayload
+  event(where: EventSubscriptionWhereInput): EventSubscriptionPayload
   category(where: CategorySubscriptionWhereInput): CategorySubscriptionPayload
   favorite(where: FavoriteSubscriptionWhereInput): FavoriteSubscriptionPayload
   ticket(where: TicketSubscriptionWhereInput): TicketSubscriptionPayload
-  event(where: EventSubscriptionWhereInput): EventSubscriptionPayload
 }
 
 type Ticket implements Node {

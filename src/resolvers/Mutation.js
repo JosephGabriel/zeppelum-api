@@ -309,7 +309,7 @@ export const Mutation = {
           },
           user: {
             connect: {
-              id: data.user,
+              id: userId,
             },
           },
         },
