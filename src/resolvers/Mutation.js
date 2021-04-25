@@ -214,7 +214,7 @@ export const Mutation = {
               id: data.category,
             },
           },
-          users: {
+          admin: {
             connect: {
               id: userId,
             },
@@ -227,28 +227,42 @@ export const Mutation = {
     return event;
   },
 
-  async updateEvent(parent, { data }, { prisma, request }, info) {
+  async updateEvent(parent, { id, data }, { prisma, request }, info) {
     const userId = getUserId(request);
 
-    const userExists = await prisma.exists.User({ id: userId });
+    const userExists = await prisma.exists.Admin({ id: userId });
 
     if (!userExists) {
       throw new Error("Usuário inválido");
     }
 
     if (typeof data.category === "string") {
-      const postExists = await prisma.exists.Post({ id: data.category });
+      const categoryExists = await prisma.exists.Category({
+        id: data.category,
+      });
 
-      if (!postExists) {
+      if (!categoryExists) {
         throw new Error("Categoria inválida");
       }
     }
 
     const event = await prisma.mutation.updateEvent(
       {
-        data: { ...data },
+        data: {
+          ...data,
+          category: {
+            connect: {
+              id: data.category,
+            },
+          },
+          admin: {
+            connect: {
+              id: userId,
+            },
+          },
+        },
         where: {
-          id: data.id,
+          id,
         },
       },
       info
@@ -257,10 +271,10 @@ export const Mutation = {
     return event;
   },
 
-  async deleteEvent(parent, { id }, { prisma, request }, info) {
+  async deleteEvent(parent, { data }, { prisma, request }, info) {
     const userId = getUserId(request);
 
-    const userExists = await prisma.exists.User({ id: userId });
+    const userExists = await prisma.exists.Admin({ id: userId });
 
     if (!userExists) {
       throw new Error("Usuário inválido");
@@ -268,7 +282,7 @@ export const Mutation = {
 
     const event = prisma.mutation.deleteEvent(
       {
-        where: { id },
+        where: { id: data.id },
       },
       info
     );

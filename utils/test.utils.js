@@ -39,6 +39,17 @@ export const eventOne = {
   event: null,
 };
 
+export const eventTwo = {
+  input: {
+    img: "https://cdn.codersociety.com/uploads/graphql-reasons.png",
+    title: "Prisma 202",
+    price: 299.99,
+    dateStart: "15/10/2021",
+    dateEnd: "22/10/2021",
+  },
+  event: null,
+};
+
 export const favoriteOne = {
   favorite: null,
 };
@@ -72,21 +83,21 @@ export const seedDatebase = async () => {
     data: categoryOne.input,
   });
 
-  // eventOne.event = await prisma.mutation.createEvent({
-  //   data: {
-  //     ...eventOne.input,
-  //     category: {
-  //       connect: {
-  //         id: categoryOne.category.id,
-  //       },
-  //     },
-  //     users: {
-  //       connect: {
-  //         id: userTwo.user.id,
-  //       },
-  //     },
-  //   },
-  // });
+  eventOne.event = await prisma.mutation.createEvent({
+    data: {
+      ...eventOne.input,
+      category: {
+        connect: {
+          id: categoryOne.category.id,
+        },
+      },
+      admin: {
+        connect: {
+          id: userTwo.user.id,
+        },
+      },
+    },
+  });
 
   // favoriteOne.favorite = await prisma.mutation.createFavorite({
   //   data: {

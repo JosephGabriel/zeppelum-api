@@ -58,8 +58,8 @@ type Mutation {
   deleteAdmin: User!
 
   createEvent(data: CreateEventInput!): Event!
-  updateEvent(data: UpdateEventInput!): Event!
-  deleteEvent(id: ID!): Event!
+  updateEvent(id: ID!, data: UpdateEventInput!): Event!
+  deleteEvent(data: DeleteEventInput!): Event!
 
   createFavorite(data: CreateFavoriteInput!): Favorite!
   deleteFavorite(id: ID!): Favorite!
@@ -184,7 +184,6 @@ input CreateEventInput {
 }
 
 input UpdateEventInput {
-  id: ID!
   img: String
   title: String
   price: Float
@@ -193,6 +192,10 @@ input UpdateEventInput {
   status: eventStatus
   category: String
   eventType: eventType
+}
+
+input DeleteEventInput {
+  id: ID!
 }
 
 input CreateCategoryInput {
