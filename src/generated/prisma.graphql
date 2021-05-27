@@ -1,12 +1,11 @@
 # source: http://localhost:4466
-# timestamp: Sun Apr 25 2021 14:32:07 GMT-0300 (Horário Padrão de Brasília)
+# timestamp: Wed May 26 2021 23:52:00 GMT-0300 (Horário Padrão de Brasília)
 
 type Admin implements Node {
   id: ID!
   name: String!
   email: String!
   password: String!
-  token: String
   createdAt: DateTime!
   updatedAt: DateTime!
   status: userStatus!
@@ -28,7 +27,6 @@ input AdminCreateInput {
   name: String!
   email: String!
   password: String!
-  token: String
   status: userStatus
   events: EventCreateManyWithoutAdminInput
 }
@@ -43,7 +41,6 @@ input AdminCreateWithoutEventsInput {
   name: String!
   email: String!
   password: String!
-  token: String
   status: userStatus
 }
 
@@ -65,8 +62,6 @@ enum AdminOrderByInput {
   email_DESC
   password_ASC
   password_DESC
-  token_ASC
-  token_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -80,7 +75,6 @@ type AdminPreviousValues {
   name: String!
   email: String!
   password: String!
-  token: String
   createdAt: DateTime!
   updatedAt: DateTime!
   status: userStatus!
@@ -129,7 +123,6 @@ input AdminUpdateInput {
   name: String
   email: String
   password: String
-  token: String
   status: userStatus
   events: EventUpdateManyWithoutAdminInput
 }
@@ -138,7 +131,6 @@ input AdminUpdateManyMutationInput {
   name: String
   email: String
   password: String
-  token: String
   status: userStatus
 }
 
@@ -153,7 +145,6 @@ input AdminUpdateWithoutEventsDataInput {
   name: String
   email: String
   password: String
-  token: String
   status: userStatus
 }
 
@@ -331,46 +322,6 @@ input AdminWhereInput {
 
   """All values not ending with the given string."""
   password_not_ends_with: String
-  token: String
-
-  """All values that are not equal to given value."""
-  token_not: String
-
-  """All values that are contained in given list."""
-  token_in: [String!]
-
-  """All values that are not contained in given list."""
-  token_not_in: [String!]
-
-  """All values less than the given value."""
-  token_lt: String
-
-  """All values less than or equal the given value."""
-  token_lte: String
-
-  """All values greater than the given value."""
-  token_gt: String
-
-  """All values greater than or equal the given value."""
-  token_gte: String
-
-  """All values containing the given string."""
-  token_contains: String
-
-  """All values not containing the given string."""
-  token_not_contains: String
-
-  """All values starting with the given string."""
-  token_starts_with: String
-
-  """All values not starting with the given string."""
-  token_not_starts_with: String
-
-  """All values ending with the given string."""
-  token_ends_with: String
-
-  """All values not ending with the given string."""
-  token_not_ends_with: String
   createdAt: DateTime
 
   """All values that are not equal to given value."""
@@ -2212,7 +2163,6 @@ type User implements Node {
   name: String!
   email: String!
   password: String!
-  token: String
   createdAt: DateTime!
   updatedAt: DateTime!
   status: userStatus!
@@ -2235,7 +2185,6 @@ input UserCreateInput {
   name: String!
   email: String!
   password: String!
-  token: String
   status: userStatus
   tickets: TicketCreateManyWithoutUserInput
   favorites: FavoriteCreateManyWithoutUserInput
@@ -2256,7 +2205,6 @@ input UserCreateWithoutFavoritesInput {
   name: String!
   email: String!
   password: String!
-  token: String
   status: userStatus
   tickets: TicketCreateManyWithoutUserInput
 }
@@ -2266,7 +2214,6 @@ input UserCreateWithoutTicketsInput {
   name: String!
   email: String!
   password: String!
-  token: String
   status: userStatus
   favorites: FavoriteCreateManyWithoutUserInput
 }
@@ -2289,8 +2236,6 @@ enum UserOrderByInput {
   email_DESC
   password_ASC
   password_DESC
-  token_ASC
-  token_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -2304,7 +2249,6 @@ type UserPreviousValues {
   name: String!
   email: String!
   password: String!
-  token: String
   createdAt: DateTime!
   updatedAt: DateTime!
   status: userStatus!
@@ -2358,7 +2302,6 @@ input UserUpdateInput {
   name: String
   email: String
   password: String
-  token: String
   status: userStatus
   tickets: TicketUpdateManyWithoutUserInput
   favorites: FavoriteUpdateManyWithoutUserInput
@@ -2368,7 +2311,6 @@ input UserUpdateManyMutationInput {
   name: String
   email: String
   password: String
-  token: String
   status: userStatus
 }
 
@@ -2390,7 +2332,6 @@ input UserUpdateWithoutFavoritesDataInput {
   name: String
   email: String
   password: String
-  token: String
   status: userStatus
   tickets: TicketUpdateManyWithoutUserInput
 }
@@ -2399,7 +2340,6 @@ input UserUpdateWithoutTicketsDataInput {
   name: String
   email: String
   password: String
-  token: String
   status: userStatus
   favorites: FavoriteUpdateManyWithoutUserInput
 }
@@ -2583,46 +2523,6 @@ input UserWhereInput {
 
   """All values not ending with the given string."""
   password_not_ends_with: String
-  token: String
-
-  """All values that are not equal to given value."""
-  token_not: String
-
-  """All values that are contained in given list."""
-  token_in: [String!]
-
-  """All values that are not contained in given list."""
-  token_not_in: [String!]
-
-  """All values less than the given value."""
-  token_lt: String
-
-  """All values less than or equal the given value."""
-  token_lte: String
-
-  """All values greater than the given value."""
-  token_gt: String
-
-  """All values greater than or equal the given value."""
-  token_gte: String
-
-  """All values containing the given string."""
-  token_contains: String
-
-  """All values not containing the given string."""
-  token_not_contains: String
-
-  """All values starting with the given string."""
-  token_starts_with: String
-
-  """All values not starting with the given string."""
-  token_not_starts_with: String
-
-  """All values ending with the given string."""
-  token_ends_with: String
-
-  """All values not ending with the given string."""
-  token_not_ends_with: String
   createdAt: DateTime
 
   """All values that are not equal to given value."""

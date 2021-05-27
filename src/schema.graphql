@@ -45,17 +45,17 @@ type Query {
 }
 
 type Mutation {
-  logginUser(data: LogginUserInput): User!
+  logginUser(data: LogginUserInput): AuthPayload!
 
-  createUser(data: CreateUserInput!): User!
+  createUser(data: CreateUserInput!): AuthPayload!
   updateUser(data: UpdateUserInput!): User!
   deleteUser: User!
 
-  logginAdmin(data: LogginUserInput): User!
+  logginAdmin(data: LogginUserInput): Admin!
 
-  createAdmin(data: CreateUserInput!): User!
-  updateAdmin(data: UpdateUserInput!): User!
-  deleteAdmin: User!
+  createAdmin(data: CreateUserInput!): Admin!
+  updateAdmin(data: UpdateUserInput!): Admin!
+  deleteAdmin: Admin!
 
   createEvent(data: CreateEventInput!): Event!
   updateEvent(id: ID!, data: UpdateEventInput!): Event!
@@ -84,7 +84,6 @@ type User {
   name: String!
   email: String
   password: String!
-  token: String
   favorites: [Favorite]!
   createdAt: String!
   updatedAt: String!
@@ -96,7 +95,6 @@ type Admin {
   name: String!
   email: String!
   password: String!
-  token: String
   createdAt: String!
   updatedAt: String!
   status: userStatus!
@@ -132,6 +130,11 @@ type Favorite {
 type Ticket {
   id: ID!
   event: Event!
+  user: User!
+}
+
+type AuthPayload {
+  token: String!
   user: User!
 }
 

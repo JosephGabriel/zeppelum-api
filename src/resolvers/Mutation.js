@@ -2,7 +2,7 @@ import bcrypt from "bcrypt";
 import { generateToken, hashPassword, getUserId } from "../../utils/utils";
 
 export const Mutation = {
-  async logginUser(parent, { data }, { prisma }, info) {
+  async logginUser(parent, { data }, { prisma }) {
     const user = await prisma.query.user({ where: { email: data.email } });
 
     if (!user) {
@@ -15,15 +15,10 @@ export const Mutation = {
       throw new Error("Email ou Senha Inválido");
     }
 
-    const result = await prisma.mutation.updateUser(
-      {
-        data: { token: generateToken(user.id) },
-        where: { id: user.id },
-      },
-      info
-    );
-
-    return result;
+    return {
+      user,
+      token: generateToken(user.id),
+    };
   },
 
   async createUser(parent, { data }, { prisma }, info) {
@@ -42,15 +37,10 @@ export const Mutation = {
       },
     });
 
-    const result = await prisma.mutation.updateUser(
-      {
-        data: { token: generateToken(user.id) },
-        where: { id: user.id },
-      },
-      info
-    );
-
-    return result;
+    return {
+      token: generateToken(user.id),
+      user,
+    };
   },
 
   async updateUser(parent, { data }, { prisma, request }, info) {
@@ -109,15 +99,10 @@ export const Mutation = {
       throw new Error("Email ou Senha Inválido");
     }
 
-    const result = await prisma.mutation.updateAdmin(
-      {
-        data: { token: generateToken(user.id) },
-        where: { id: user.id },
-      },
-      info
-    );
-
-    return result;
+    return {
+      user,
+      token: generateToken(user.id),
+    };
   },
 
   async createAdmin(parent, { data }, { prisma }, info) {
@@ -136,15 +121,10 @@ export const Mutation = {
       },
     });
 
-    const result = await prisma.mutation.updateAdmin(
-      {
-        data: { token: generateToken(user.id) },
-        where: { id: user.id },
-      },
-      info
-    );
-
-    return result;
+    return {
+      user,
+      token: generateToken(user.id),
+    };
   },
 
   async updateAdmin(parent, { data }, { prisma, request }, info) {

@@ -22,7 +22,7 @@ test("Deve fazer login e retornar um usuário válido", async () => {
 
   const { data } = await client.mutate({ mutation: logginUser, variables });
 
-  expect(data.logginUser.email).toBe("joseph@gmail.com");
+  expect(data.logginUser.user.email).toBe("joseph@gmail.com");
 });
 
 test("Deve criar um novo usuário e retornar o mesmo", async () => {
@@ -35,8 +35,7 @@ test("Deve criar um novo usuário e retornar o mesmo", async () => {
   };
 
   const { data } = await client.mutate({ mutation: createUser, variables });
-
-  expect(data.createUser.email).toBe("cronos@gmail.com");
+  expect(data.createUser.user.email).toBe("cronos@gmail.com");
 });
 
 test("Deve fazer update de um usuário", async () => {

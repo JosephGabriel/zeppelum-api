@@ -10,6 +10,7 @@ export const userOne = {
     password: bcrypt.hashSync("joseph111", 10),
   },
   user: null,
+  token: null,
 };
 
 export const userTwo = {
@@ -19,6 +20,7 @@ export const userTwo = {
     password: bcrypt.hashSync("alice123", 10),
   },
   user: null,
+  token: null,
 };
 
 export const categoryOne = {
@@ -65,19 +67,13 @@ export const seedDatebase = async () => {
     data: userOne.input,
   });
 
-  userOne.user = await prisma.mutation.updateUser({
-    data: { token: await generateToken(userOne.user.id) },
-    where: { id: userOne.user.id },
-  });
+  userOne.user.token = await generateToken(userOne.user.id);
 
   userTwo.user = await prisma.mutation.createAdmin({
     data: userTwo.input,
   });
 
-  userTwo.user = await prisma.mutation.updateAdmin({
-    data: { token: await generateToken(userTwo.user.id) },
-    where: { id: userTwo.user.id },
-  });
+  userTwo.user.token = await generateToken(userTwo.user.id);
 
   categoryOne.category = await prisma.mutation.createCategory({
     data: categoryOne.input,

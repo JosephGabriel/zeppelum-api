@@ -3,12 +3,11 @@ type User {
   name: String!
   email: String! @unique
   password: String!
-  token: String
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
   status: userStatus! @default(value: INATIVO)
-  tickets: [Ticket!]! @relation(name: "TicketToUser", onDelete: CASCADE)
-  favorites: [Favorite!]! @relation(name: "UserToFavorite", onDelete: CASCADE)
+  tickets: [Ticket]! @relation(name: "TicketToUser", onDelete: CASCADE)
+  favorites: [Favorite]! @relation(name: "UserToFavorite", onDelete: CASCADE)
 }
 
 type Admin {
@@ -16,11 +15,10 @@ type Admin {
   name: String!
   email: String! @unique
   password: String!
-  token: String
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
   status: userStatus! @default(value: INATIVO)
-  events: [Event!]! @relation(name: "AdminToEvent", onDelete: CASCADE)
+  events: [Event]! @relation(name: "AdminToEvent", onDelete: CASCADE)
 }
 
 type Event {
@@ -33,15 +31,15 @@ type Event {
   status: eventStatus! @default(value: EM_BREVE)
   eventType: eventType! @default(value: ONLINE)
   category: Category! @relation(name: "CategoryToEvent", onDelete: SET_NULL)
-  tickets: [Ticket!]! @relation(name: "TicketToEvent", onDelete: CASCADE)
+  tickets: [Ticket]! @relation(name: "TicketToEvent", onDelete: CASCADE)
   admin: Admin! @relation(name: "AdminToEvent", onDelete: SET_NULL)
-  favorites: [Favorite!]! @relation(name: "FavoriteToEvent", onDelete: CASCADE)
+  favorites: [Favorite]! @relation(name: "FavoriteToEvent", onDelete: CASCADE)
 }
 
 type Category {
   id: ID! @id
   name: String!
-  events: [Event!]! @relation(name: "CategoryToEvent", onDelete: CASCADE)
+  events: [Event]! @relation(name: "CategoryToEvent", onDelete: CASCADE)
 }
 
 type Favorite {

@@ -1,35 +1,38 @@
 import { gql } from "apollo-boost";
 
 export const logginUser = gql`
-  mutation($data: LogginUserInput!) {
+  mutation ($data: LogginUserInput!) {
     logginUser(data: $data) {
-      id
-      name
-      email
+      user {
+        id
+        name
+        email
+      }
     }
   }
 `;
 
 export const createUser = gql`
-  mutation($data: CreateUserInput!) {
+  mutation ($data: CreateUserInput!) {
     createUser(data: $data) {
-      id
-      name
-      email
-      password
       token
+      user {
+        id
+        name
+        email
+        password
+      }
     }
   }
 `;
 
 export const updateUser = gql`
-  mutation($data: UpdateUserInput!) {
+  mutation ($data: UpdateUserInput!) {
     updateUser(data: $data) {
       id
       name
       email
       password
-      token
     }
   }
 `;
@@ -41,7 +44,6 @@ export const deleteUser = gql`
       name
       email
       password
-      token
     }
   }
 `;
