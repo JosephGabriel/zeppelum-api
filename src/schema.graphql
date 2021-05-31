@@ -51,9 +51,9 @@ type Mutation {
   updateUser(data: UpdateUserInput!): User!
   deleteUser: User!
 
-  logginAdmin(data: LogginUserInput): Admin!
+  logginAdmin(data: LogginUserInput): AuthPayload!
 
-  createAdmin(data: CreateUserInput!): Admin!
+  createAdmin(data: CreateUserInput!): AuthPayload!
   updateAdmin(data: UpdateUserInput!): Admin!
   deleteAdmin: Admin!
 
