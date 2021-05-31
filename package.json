@@ -4,11 +4,10 @@
   "description": "A GraphQL Api using Prisma, Mysql, Docker, JWT, Jest, Bcrypt and GraphQL Yoga for an application made in React Native for the purpose of selling event tickets (Online or Presential) ",
   "main": "index.js",
   "scripts": {
-    "start": "cd prisma docker-compose up -d && cd .. && babel-node src/index",
-    "build": "babel-node src/index",
-    "dev": "nodemon --exec babel-node src/index --ext graphql,js",
+    "start": "env-cmd ./config/prod.env babel-node src/index",
+    "dev": "env-cmd ./config/dev.env nodemon --exec babel-node src/index --ext graphql,js",
     "get-schema": "graphql get-schema -p prisma",
-    "test": "jest --watch --runInBand"
+    "test": "env-cmd ./config/test.env jest --watch --runInBand"
   },
   "keywords": [],
   "author": "Joseph Gabriel",
