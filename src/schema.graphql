@@ -36,6 +36,13 @@ type Query {
     orderBy: UserOrderByInput
   ): [Event!]!
 
+  eventsByCategory(
+    category: String
+    first: Int
+    skip: Int
+    orderBy: UserOrderByInput
+  ): [Event!]!
+
   relatedEvents(
     query: String
     first: Int

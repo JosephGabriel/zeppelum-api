@@ -64,6 +64,26 @@ export const Query = {
     return events;
   },
 
+  async eventsByCategory(parent, { category, first, skip, orderBy }, { prisma }, info) {
+    const opArgs = {
+      first,
+      skip,
+      orderBy,
+    };
+
+    if (query) {
+      opArgs.where.category = [
+        {
+          name: query,
+        },
+      ];
+    }
+
+    const events = await prisma.query.events(opArgs, info);
+
+    return events;
+  },
+
   async relatedEvents(parent, { query, first, skip, orderBy }, { prisma }, info) {
     const opArgs = {
       first,
