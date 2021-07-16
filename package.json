@@ -9,7 +9,10 @@
     "get-schema": "graphql get-schema -p prisma",
     "test": "env-cmd ./config/test.env jest --watch --runInBand"
   },
-  "keywords": [],
+  "keywords": [
+    "prisma",
+    "graphql"
+  ],
   "author": "Joseph Gabriel",
   "license": "ISC",
   "dependencies": {
