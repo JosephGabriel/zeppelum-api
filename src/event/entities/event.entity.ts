@@ -8,12 +8,12 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-enum EventType {
+export enum EventType {
   ONLINE = 'ONLINE',
   PRESENTIAL = 'PRESENTIAL',
 }
 
-enum EventStatus {
+export enum EventStatus {
   COMING_SOON = 'COMING_SOON',
   ON_GOING = 'ON_GOING',
   CONCLUDED = 'CONCLUDED',
@@ -34,7 +34,7 @@ export class Event {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Field(() => ID)
+  @Field()
   @Column()
   image: string;
 
