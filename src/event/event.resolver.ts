@@ -2,6 +2,8 @@ import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 
 import { EventService } from './event.service';
 
+import { Event } from './entities/event.entity';
+
 import {
   returningEvent,
   returningId,
@@ -17,17 +19,17 @@ export class EventResolver {
   constructor(private eventService: EventService) {}
 
   @Mutation(returningEvent)
-  createEvent(@Args('data') data: CreateEventInput) {
+  createEvent(@Args('data') data: CreateEventInput): Promise<Event> {
     return this.eventService.createEvent(data);
   }
 
   @Query(returningEvents)
-  events() {
+  events(): Promise<Event[]> {
     return this.eventService.findAllEvents();
   }
 
   @Query(returningEvent)
-  event(@Args('id', { type: returningId }) id: string) {
+  event(@Args('id', { type: returningId }) id: string): Promise<Event> {
     return this.eventService.findOneEventById(id);
   }
 
@@ -35,12 +37,12 @@ export class EventResolver {
   updateEvent(
     @Args('id', { type: returningId }) id: string,
     @Args('data') data: UpdateEventInput,
-  ) {
+  ): Promise<Event> {
     return this.eventService.updateEventById(id, data);
   }
 
   @Mutation(returningBoolean)
-  removeEvent(@Args('id', { type: returningId }) id: string) {
+  removeEvent(@Args('id', { type: returningId }) id: string): Promise<boolean> {
     return this.eventService.removeEventById(id);
   }
 }
