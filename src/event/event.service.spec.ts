@@ -1,18 +1,173 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { getRepositoryToken } from '@nestjs/typeorm';
+
+import {
+  InternalServerErrorException,
+  NotFoundException,
+  Provider,
+} from '@nestjs/common';
+
+import { Event, EventStatus, EventType } from './entities/event.entity';
+
 import { EventService } from './event.service';
+
+import { TestUtils } from './event.utils';
 
 describe('EventService', () => {
   let service: EventService;
 
-  beforeEach(async () => {
+  const mockRepository = {
+    create: jest.fn(),
+    save: jest.fn(),
+    find: jest.fn(),
+    findOneBy: jest.fn(),
+    update: jest.fn(),
+    remove: jest.fn(),
+  };
+
+  beforeAll(async () => {
+    const TypeormRepository: Provider = {
+      provide: getRepositoryToken(Event),
+      useValue: mockRepository,
+    };
+
     const module: TestingModule = await Test.createTestingModule({
-      providers: [EventService],
+      providers: [EventService, TypeormRepository],
     }).compile();
 
     service = module.get<EventService>(EventService);
   });
 
+  beforeEach(() => {
+    Object.keys(mockRepository).map((key) => {
+      mockRepository[key as keyof typeof mockRepository].mockReset();
+    });
+  });
+
   it('should be defined', () => {
     expect(service).toBeDefined();
+  });
+
+  describe('findAll', () => {
+    it('should find all events', async () => {
+      const mockedEvent = TestUtils.getValidEvent();
+
+      mockRepository.find.mockReturnValue([mockedEvent, mockedEvent]);
+
+      const returnedEvent = await service.findAll();
+
+      expect(returnedEvent).toHaveLength(2);
+      expect(mockRepository.find).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('findOne', () => {
+    it('should find event by id', async () => {
+      const mockedEvent = TestUtils.getValidEvent();
+
+      mockRepository.findOneBy.mockReturnValue(mockedEvent);
+
+      const returnedEvent = await service.findOne(mockedEvent.id);
+
+      expect(returnedEvent.title).toBe(mockedEvent.title);
+      expect(mockRepository.findOneBy).toHaveBeenCalledTimes(1);
+    });
+
+    it('should return an exeption when does not find the event', async () => {
+      const mockedEvent = TestUtils.getValidEvent();
+
+      mockRepository.findOneBy.mockReturnValue(null);
+
+      try {
+        await service.findOne(mockedEvent.title);
+      } catch (error) {
+        expect(error.message).toBe('Event not found');
+        expect(error).toBeInstanceOf(NotFoundException);
+      }
+    });
+  });
+
+  describe('create', () => {
+    it('should create an event', async () => {
+      const mockedEvent = TestUtils.getValidEvent();
+
+      mockRepository.create.mockReturnValue(mockedEvent);
+      mockRepository.save.mockReturnValue(mockedEvent);
+
+      const returnedEvent = await service.create(mockedEvent);
+
+      expect(returnedEvent.title).toBe(mockedEvent.title);
+      expect(returnedEvent.type).toBe(EventType.ONLINE);
+      expect(returnedEvent.status).toBe(EventStatus.COMING_SOON);
+      expect(mockRepository.create).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('update', () => {
+    it('should update event by id', async () => {
+      const mockedEvent = TestUtils.getValidEvent();
+
+      mockRepository.findOneBy.mockReturnValue(mockedEvent);
+
+      const returnedEvent = await service.update(mockedEvent.id, mockedEvent);
+
+      expect(returnedEvent.title).toBe(mockedEvent.title);
+      expect(mockRepository.findOneBy).toHaveBeenCalledTimes(1);
+      expect(mockRepository.update).toHaveBeenCalledTimes(1);
+    });
+
+    it('should return an exeption when does not find the event to update', async () => {
+      const mockedEvent = TestUtils.getValidEvent();
+
+      mockRepository.findOneBy.mockReturnValue(null);
+
+      try {
+        await service.findOne(mockedEvent.title);
+      } catch (error) {
+        expect(error.message).toBe('Event not found');
+        expect(error).toBeInstanceOf(NotFoundException);
+      }
+    });
+  });
+
+  describe('remove', () => {
+    it('should remove event by id', async () => {
+      const mockedEvent = TestUtils.getValidEvent();
+
+      mockRepository.findOneBy.mockReturnValue(mockedEvent);
+      mockRepository.remove.mockReturnValue(mockedEvent);
+
+      const returnedEvent = await service.remove(mockedEvent.id);
+
+      expect(returnedEvent).toBe(true);
+      expect(mockRepository.findOneBy).toHaveBeenCalledTimes(1);
+      expect(mockRepository.remove).toHaveBeenCalledTimes(1);
+    });
+
+    it('should return an exeption when does not find the event to remove', async () => {
+      const mockedEvent = TestUtils.getValidEvent();
+
+      mockRepository.findOneBy.mockReturnValue(null);
+
+      try {
+        await service.remove(mockedEvent.id);
+      } catch (error) {
+        expect(error.message).toBe('Event not found');
+        expect(error).toBeInstanceOf(NotFoundException);
+      }
+    });
+
+    it('should return an exeption when can not remove the event', async () => {
+      const mockedEvent = TestUtils.getValidEvent();
+
+      mockRepository.findOneBy.mockReturnValue(mockedEvent);
+      mockRepository.remove.mockReturnValue(null);
+
+      try {
+        await service.remove(mockedEvent.id);
+      } catch (error) {
+        expect(error).toBeInstanceOf(InternalServerErrorException);
+      }
+    });
   });
 });
