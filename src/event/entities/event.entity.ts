@@ -7,6 +7,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+
 import {
   returningEventStatus,
   returningEventType,
@@ -57,11 +58,11 @@ export class Event {
 
   @Field()
   @Column()
-  dateStart: string;
+  dateStart: Date;
 
   @Field()
   @Column()
-  dateEnd: string;
+  dateEnd: Date;
 
   @Field(returningEventType)
   @Column({
@@ -80,21 +81,4 @@ export class Event {
 
   @UpdateDateColumn()
   updatedAt: Date;
-
-  // @BeforeInsert()
-  // insertCreated() {
-  //   this.created_at = new Date(
-  //     moment().tz('America/Sao_Paulo').format('YYYY-MM-DD HH:mm:ss'),
-  //   );
-  //   this.updated_at = new Date(
-  //     moment().tz('America/Sao_Paulo').format('YYYY-MM-DD HH:mm:ss'),
-  //   );
-  // }
-
-  // @BeforeUpdate()
-  // insertUpdated() {
-  //   this.updated_at = new Date(
-  //     moment().tz('America/Sao_Paulo').format('YYYY-MM-DD HH:mm:ss'),
-  //   );
-  // }
 }

@@ -13,6 +13,7 @@ import {
 
 import { CreateEventInput } from './dto/create-event.input';
 import { UpdateEventInput } from './dto/update-event.input';
+import { FilterOptions } from './dto/filter-options.input';
 
 @Resolver(returningEvent)
 export class EventResolver {
@@ -24,8 +25,10 @@ export class EventResolver {
   }
 
   @Query(returningEvents)
-  events(): Promise<Event[]> {
-    return this.eventService.findAllEvents();
+  events(
+    @Args('filter', { nullable: true }) filter?: FilterOptions,
+  ): Promise<Event[]> {
+    return this.eventService.findAllEvents(filter);
   }
 
   @Query(returningEvent)

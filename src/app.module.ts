@@ -11,6 +11,9 @@ import { EventModule } from './event/event.module';
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: join(__dirname, 'src', 'schema.gql'),
+      buildSchemaOptions: {
+        dateScalarMode: 'isoDate',
+      },
     }),
     TypeOrmModule.forRoot({
       type: 'sqlite',

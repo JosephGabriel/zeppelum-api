@@ -11,6 +11,7 @@ import { CreateEventInput } from './dto/create-event.input';
 import { UpdateEventInput } from './dto/update-event.input';
 
 import { Event } from './entities/event.entity';
+import { FilterOptions } from './dto/filter-options.input';
 
 @Injectable()
 export class EventService {
@@ -25,8 +26,14 @@ export class EventService {
     return await this.eventRepository.save(event);
   }
 
-  async findAllEvents(): Promise<Event[]> {
-    return await this.eventRepository.find();
+  async findAllEvents(filter?: FilterOptions): Promise<Event[]> {
+    return await this.eventRepository.find({
+      skip: filter?.skip,
+      take: filter?.take,
+      order: {
+        createdAt: filter?.sortBy,
+      },
+    });
   }
 
   async findOneEventById(id: string): Promise<Event> {

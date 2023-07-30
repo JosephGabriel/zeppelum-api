@@ -10,8 +10,8 @@ export class TestUtils {
     event.title = 'Meu Evento';
     event.price = 29;
     event.description = 'Descrição do meu evento';
-    event.dateStart = '2023-08-01T10:00:00';
-    event.dateEnd = '2023-08-01T18:00:00';
+    event.dateStart = new Date();
+    event.dateEnd = new Date();
     event.type = EventType.ONLINE;
     event.status = EventStatus.COMING_SOON;
     event.createdAt = new Date('2023-07-30T12:21:43.000Z');
