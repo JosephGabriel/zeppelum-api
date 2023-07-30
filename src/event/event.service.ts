@@ -19,17 +19,17 @@ export class EventService {
     private eventRepository: Repository<Event>,
   ) {}
 
-  async create(data: CreateEventInput): Promise<Event> {
+  async createEvent(data: CreateEventInput): Promise<Event> {
     const event = this.eventRepository.create(data);
 
     return await this.eventRepository.save(event);
   }
 
-  async findAll(): Promise<Event[]> {
+  async findAllEvents(): Promise<Event[]> {
     return await this.eventRepository.find();
   }
 
-  async findOne(id: string): Promise<Event> {
+  async findOneEventById(id: string): Promise<Event> {
     const user = await this.eventRepository.findOneBy({
       id,
     });
@@ -41,16 +41,16 @@ export class EventService {
     return user;
   }
 
-  async update(id: string, data: UpdateEventInput): Promise<Event> {
-    const event = await this.findOne(id);
+  async updateEventById(id: string, data: UpdateEventInput): Promise<Event> {
+    const event = await this.findOneEventById(id);
 
     await this.eventRepository.update(event, data);
 
     return Object.assign(event, data);
   }
 
-  async remove(id: string): Promise<boolean> {
-    const event = await this.findOne(id);
+  async removeEventById(id: string): Promise<boolean> {
+    const event = await this.findOneEventById(id);
 
     const deletedEvent = await this.eventRepository.remove(event);
 

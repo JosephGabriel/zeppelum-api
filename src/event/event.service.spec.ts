@@ -48,26 +48,26 @@ describe('EventService', () => {
     expect(service).toBeDefined();
   });
 
-  describe('findAll', () => {
+  describe('When findAllEvents', () => {
     it('should find all events', async () => {
       const mockedEvent = TestUtils.getValidEvent();
 
       mockRepository.find.mockReturnValue([mockedEvent, mockedEvent]);
 
-      const returnedEvent = await service.findAll();
+      const returnedEvent = await service.findAllEvents();
 
       expect(returnedEvent).toHaveLength(2);
       expect(mockRepository.find).toHaveBeenCalledTimes(1);
     });
   });
 
-  describe('findOne', () => {
+  describe('When findOneEventById', () => {
     it('should find event by id', async () => {
       const mockedEvent = TestUtils.getValidEvent();
 
       mockRepository.findOneBy.mockReturnValue(mockedEvent);
 
-      const returnedEvent = await service.findOne(mockedEvent.id);
+      const returnedEvent = await service.findOneEventById(mockedEvent.id);
 
       expect(returnedEvent.title).toBe(mockedEvent.title);
       expect(mockRepository.findOneBy).toHaveBeenCalledTimes(1);
@@ -79,7 +79,7 @@ describe('EventService', () => {
       mockRepository.findOneBy.mockReturnValue(null);
 
       try {
-        await service.findOne(mockedEvent.title);
+        await service.findOneEventById(mockedEvent.title);
       } catch (error) {
         expect(error.message).toBe('Event not found');
         expect(error).toBeInstanceOf(NotFoundException);
@@ -87,14 +87,14 @@ describe('EventService', () => {
     });
   });
 
-  describe('create', () => {
+  describe('When createEvent', () => {
     it('should create an event', async () => {
       const mockedEvent = TestUtils.getValidEvent();
 
       mockRepository.create.mockReturnValue(mockedEvent);
       mockRepository.save.mockReturnValue(mockedEvent);
 
-      const returnedEvent = await service.create(mockedEvent);
+      const returnedEvent = await service.createEvent(mockedEvent);
 
       expect(returnedEvent.title).toBe(mockedEvent.title);
       expect(returnedEvent.type).toBe(EventType.ONLINE);
@@ -103,13 +103,16 @@ describe('EventService', () => {
     });
   });
 
-  describe('update', () => {
+  describe('When updateEventById', () => {
     it('should update event by id', async () => {
       const mockedEvent = TestUtils.getValidEvent();
 
       mockRepository.findOneBy.mockReturnValue(mockedEvent);
 
-      const returnedEvent = await service.update(mockedEvent.id, mockedEvent);
+      const returnedEvent = await service.updateEventById(
+        mockedEvent.id,
+        mockedEvent,
+      );
 
       expect(returnedEvent.title).toBe(mockedEvent.title);
       expect(mockRepository.findOneBy).toHaveBeenCalledTimes(1);
@@ -122,7 +125,7 @@ describe('EventService', () => {
       mockRepository.findOneBy.mockReturnValue(null);
 
       try {
-        await service.findOne(mockedEvent.title);
+        await service.findOneEventById(mockedEvent.title);
       } catch (error) {
         expect(error.message).toBe('Event not found');
         expect(error).toBeInstanceOf(NotFoundException);
@@ -130,14 +133,14 @@ describe('EventService', () => {
     });
   });
 
-  describe('remove', () => {
+  describe('When removeEventById', () => {
     it('should remove event by id', async () => {
       const mockedEvent = TestUtils.getValidEvent();
 
       mockRepository.findOneBy.mockReturnValue(mockedEvent);
       mockRepository.remove.mockReturnValue(mockedEvent);
 
-      const returnedEvent = await service.remove(mockedEvent.id);
+      const returnedEvent = await service.removeEventById(mockedEvent.id);
 
       expect(returnedEvent).toBe(true);
       expect(mockRepository.findOneBy).toHaveBeenCalledTimes(1);
@@ -150,7 +153,7 @@ describe('EventService', () => {
       mockRepository.findOneBy.mockReturnValue(null);
 
       try {
-        await service.remove(mockedEvent.id);
+        await service.removeEventById(mockedEvent.id);
       } catch (error) {
         expect(error.message).toBe('Event not found');
         expect(error).toBeInstanceOf(NotFoundException);
@@ -164,7 +167,7 @@ describe('EventService', () => {
       mockRepository.remove.mockReturnValue(null);
 
       try {
-        await service.remove(mockedEvent.id);
+        await service.removeEventById(mockedEvent.id);
       } catch (error) {
         expect(error).toBeInstanceOf(InternalServerErrorException);
       }

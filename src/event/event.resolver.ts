@@ -12,17 +12,17 @@ export class EventResolver {
 
   @Mutation(() => Event)
   createEvent(@Args('data') data: CreateEventInput) {
-    return this.eventService.create(data);
+    return this.eventService.createEvent(data);
   }
 
   @Query(() => [Event])
   events() {
-    return this.eventService.findAll();
+    return this.eventService.findAllEvents();
   }
 
   @Query(() => Event)
   event(@Args('id', { type: () => ID }) id: string) {
-    return this.eventService.findOne(id);
+    return this.eventService.findOneEventById(id);
   }
 
   @Mutation(() => Event)
@@ -30,11 +30,11 @@ export class EventResolver {
     @Args('id', { type: () => ID }) id: string,
     @Args('data') data: UpdateEventInput,
   ) {
-    return this.eventService.update(id, data);
+    return this.eventService.updateEventById(id, data);
   }
 
   @Mutation(() => Boolean)
   removeEvent(@Args('id', { type: () => ID }) id: string) {
-    return this.eventService.remove(id);
+    return this.eventService.removeEventById(id);
   }
 }
