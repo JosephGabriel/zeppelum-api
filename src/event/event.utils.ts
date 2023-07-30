@@ -1,3 +1,4 @@
+import { ID } from '@nestjs/graphql';
 import { Event, EventStatus, EventType } from './entities/event.entity';
 
 export class TestUtils {
@@ -37,3 +38,10 @@ export const eventMockRepository = {
   update: jest.fn(),
   remove: jest.fn(),
 };
+
+export const returningEvent = () => Event;
+export const returningEvents = () => [Event];
+export const returningBoolean = () => Boolean;
+export const returningId = () => ID;
+export const returningEventType = () => EventType;
+export const returningEventStatus = () => EventStatus;

@@ -1,4 +1,4 @@
-import { ObjectType, Field, registerEnumType, ID } from '@nestjs/graphql';
+import { ObjectType, Field, registerEnumType } from '@nestjs/graphql';
 
 import {
   Column,
@@ -7,6 +7,11 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import {
+  returningEventStatus,
+  returningEventType,
+  returningId,
+} from '../event.utils';
 
 export enum EventType {
   ONLINE = 'ONLINE',
@@ -30,7 +35,7 @@ registerEnumType(EventStatus, {
 @ObjectType()
 @Entity()
 export class Event {
-  @Field(() => ID)
+  @Field(returningId)
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -58,13 +63,13 @@ export class Event {
   @Column()
   dateEnd: string;
 
-  @Field(() => EventType)
+  @Field(returningEventType)
   @Column({
     default: EventType.ONLINE,
   })
   type: EventType;
 
-  @Field(() => EventStatus)
+  @Field(returningEventStatus)
   @Column({
     default: EventStatus.COMING_SOON,
   })

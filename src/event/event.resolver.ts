@@ -1,40 +1,46 @@
-import { Resolver, Query, Mutation, Args, ID } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 
 import { EventService } from './event.service';
-import { Event } from './entities/event.entity';
+
+import {
+  returningEvent,
+  returningId,
+  returningEvents,
+  returningBoolean,
+} from './event.utils';
 
 import { CreateEventInput } from './dto/create-event.input';
 import { UpdateEventInput } from './dto/update-event.input';
 
-@Resolver(() => Event)
+@Resolver(returningEvent)
 export class EventResolver {
   constructor(private eventService: EventService) {}
 
-  @Mutation(() => Event)
+  @Mutation(returningEvent)
   createEvent(@Args('data') data: CreateEventInput) {
     return this.eventService.createEvent(data);
   }
 
-  @Query(() => [Event])
+  @Query(returningEvents)
   events() {
     return this.eventService.findAllEvents();
   }
 
-  @Query(() => Event)
-  event(@Args('id', { type: () => ID }) id: string) {
+  @Query(returningEvent)
+  event(@Args('id', { type: returningId }) id: string) {
     return this.eventService.findOneEventById(id);
   }
 
-  @Mutation(() => Event)
+  @Mutation(returningEvent)
   updateEvent(
-    @Args('id', { type: () => ID }) id: string,
+    @Args('id', { type: returningId }) id: string,
     @Args('data') data: UpdateEventInput,
   ) {
     return this.eventService.updateEventById(id, data);
   }
 
-  @Mutation(() => Boolean)
-  removeEvent(@Args('id', { type: () => ID }) id: string) {
+  @Mutation(returningBoolean)
+  removeEvent(@Args('id', { type: returningId }) id: string) {
     return this.eventService.removeEventById(id);
   }
 }
