@@ -30,15 +30,6 @@ export class TestUtils {
   };
 }
 
-export const eventMockRepository = {
-  create: jest.fn(),
-  save: jest.fn(),
-  find: jest.fn(),
-  findOneBy: jest.fn(),
-  update: jest.fn(),
-  remove: jest.fn(),
-};
-
 export const returningEvent = () => Event;
 export const returningEvents = () => [Event];
 export const returningBoolean = () => Boolean;

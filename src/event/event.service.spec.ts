@@ -11,10 +11,19 @@ import { Event, EventStatus, EventType } from './entities/event.entity';
 
 import { EventService } from './event.service';
 
-import { TestUtils, eventMockRepository } from './event.utils';
+import { TestUtils } from './event.utils';
 
 describe('EventService', () => {
   let service: EventService;
+
+  const eventMockRepository = {
+    create: jest.fn(),
+    save: jest.fn(),
+    find: jest.fn(),
+    findOneBy: jest.fn(),
+    update: jest.fn(),
+    remove: jest.fn(),
+  };
 
   beforeAll(async () => {
     const TypeormRepository: Provider = {

@@ -8,7 +8,6 @@ import { EventService } from './event.service';
 
 import {
   TestUtils,
-  eventMockRepository,
   returningEvents,
   returningBoolean,
   returningId,
@@ -20,6 +19,16 @@ import { Event, EventStatus, EventType } from './entities/event.entity';
 
 describe('EventResolver', () => {
   let resolver: EventResolver;
+
+  const eventMockRepository = {
+    create: jest.fn(),
+    save: jest.fn(),
+    find: jest.fn(),
+    findOneBy: jest.fn(),
+    update: jest.fn(),
+    remove: jest.fn(),
+  };
+
   const TypeormRepository: Provider = {
     provide: getRepositoryToken(Event),
     useValue: eventMockRepository,
