@@ -18,4 +18,22 @@ export class TestUtils {
 
     return event;
   }
+
+  static input = {
+    image: 'https://example.com/image.jpg',
+    title: 'Meu Evento',
+    price: 29,
+    description: 'Descrição do meu evento',
+    dateStart: '2023-08-01T10:00:00',
+    dateEnd: '2023-08-01T18:00:00',
+  };
 }
+
+export const eventMockRepository = {
+  create: jest.fn(),
+  save: jest.fn(),
+  find: jest.fn(),
+  findOneBy: jest.fn(),
+  update: jest.fn(),
+  remove: jest.fn(),
+};
