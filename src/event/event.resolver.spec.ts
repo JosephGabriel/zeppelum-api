@@ -1,19 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Provider } from '@nestjs/common';
-import { ID } from '@nestjs/graphql';
 
 import { EventResolver } from './event.resolver';
 import { EventService } from './event.service';
 
-import {
-  TestUtils,
-  returningEvents,
-  returningBoolean,
-  returningId,
-  returningEventStatus,
-  returningEventType,
-} from './event.utils';
+import { TestUtils } from './event.utils';
 
 import { Event, EventStatus, EventType } from './entities/event.entity';
 
@@ -133,16 +125,6 @@ describe('EventResolver', () => {
           expect(error.message).toBe('Event not found');
         }
       });
-    });
-  });
-
-  describe('Types', () => {
-    it('should be correct types', () => {
-      expect(returningEvents()).toBeInstanceOf(Array);
-      expect(returningBoolean()).toBe(Boolean);
-      expect(returningId()).toBe(ID);
-      expect(returningEventType()).toBe(EventType);
-      expect(returningEventStatus()).toBe(EventStatus);
     });
   });
 });

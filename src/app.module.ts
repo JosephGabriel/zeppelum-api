@@ -5,6 +5,7 @@ import { Module } from '@nestjs/common';
 import { join } from 'path';
 
 import { EventModule } from './event/event.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { EventModule } from './event/event.module';
       synchronize: true,
     }),
     EventModule,
+    UsersModule,
   ],
   controllers: [],
   providers: [],

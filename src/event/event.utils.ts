@@ -1,4 +1,3 @@
-import { ID } from '@nestjs/graphql';
 import { Event, EventStatus, EventType } from './entities/event.entity';
 
 export class TestUtils {
@@ -25,14 +24,7 @@ export class TestUtils {
     title: 'Meu Evento',
     price: 29,
     description: 'Descrição do meu evento',
-    dateStart: '2023-08-01T10:00:00',
-    dateEnd: '2023-08-01T18:00:00',
+    dateStart: new Date('2023-08-01T10:00:00'),
+    dateEnd: new Date('2023-08-01T18:00:00'),
   };
 }
-
-export const returningEvent = () => Event;
-export const returningEvents = () => [Event];
-export const returningBoolean = () => Boolean;
-export const returningId = () => ID;
-export const returningEventType = () => EventType;
-export const returningEventStatus = () => EventStatus;
